@@ -117,6 +117,17 @@ export default function Navbar() {
                       <NavLink href="/profile"            label="Профайл" icon={<i className="fa-solid fa-gear text-sm" />} />
                     </>
                   )}
+                  {session.user.role === "ADMIN" && (
+                    <>
+                      <NavLink href="/dashboard" label="Самбар"  icon={<i className="fa-solid fa-gauge-high text-sm" />} />
+                      <NavLink href="/profile"   label="Профайл" icon={<i className="fa-solid fa-gear text-sm" />} />
+                      <Link href="/admin"
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-all hover:opacity-90"
+                        style={{ background: "linear-gradient(135deg,#7C3AED,#A855F7)", color: "#FFFFFF", boxShadow: "0 2px 10px rgba(168,85,247,0.35)" }}>
+                        <i className="fa-solid fa-shield-halved text-sm" />Админ
+                      </Link>
+                    </>
+                  )}
 
                   <div className="w-px h-5 mx-1" style={{ background: glass ? "rgba(255,255,255,0.20)" : "#E2E7EF" }} />
                   <div className="flex items-center gap-2">
@@ -211,6 +222,17 @@ export default function Navbar() {
                   <NavLink mobile href="/employer/post-job"   label="Ажил нийтлэх" icon={<i className="fa-solid fa-plus text-sm" />} />
                   <NavLink mobile href="/employer/dashboard"  label="Самбар"        icon={<i className="fa-solid fa-gauge-high text-sm" />} />
                   <NavLink mobile href="/profile"             label="Профайл"       icon={<i className="fa-solid fa-gear text-sm" />} />
+                </>
+              )}
+              {session.user.role === "ADMIN" && (
+                <>
+                  <NavLink mobile href="/dashboard" label="Самбар"  icon={<i className="fa-solid fa-gauge-high text-sm" />} />
+                  <NavLink mobile href="/profile"   label="Профайл" icon={<i className="fa-solid fa-gear text-sm" />} />
+                  <Link href="/admin" onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all"
+                    style={{ background: "linear-gradient(135deg,#7C3AED,#A855F7)", color: "#FFFFFF" }}>
+                    <i className="fa-solid fa-shield-halved text-sm" />Админ самбар
+                  </Link>
                 </>
               )}
               <div className="pt-2 mt-2 border-t" style={{ borderColor: "#F3F4F6" }}>
