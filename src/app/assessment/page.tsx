@@ -22,7 +22,7 @@ const TRAIT_LABELS: Record<string, string> = {
   neuroticism: "Сэтгэл хөдлөл",
 };
 
-const ANSWERS = ["Огт үгүй", "Үгүй", "Заримдаа", "Тийм", "Маш тийм"];
+const ANSWERS = ["Огт санал нийлэхгүй", "Санал нийлэхгүй", "Дунд зэрэг", "Санал нийлнэ"];
 
 export default function AssessmentPage() {
   const { data: session } = useSession();
@@ -39,10 +39,10 @@ export default function AssessmentPage() {
     for (const q of BIG_FIVE_QUESTIONS) {
       const ans = answers[q.id];
       if (ans === undefined) continue;
-      totals[q.trait].push(q.reverse ? 6 - ans : ans);
+      totals[q.trait].push(q.reverse ? 5 - ans : ans);
     }
     const avg = (arr: number[]) =>
-      arr.length ? Math.round((arr.reduce((a, b) => a + b, 0) / arr.length / 5) * 100) : 50;
+      arr.length ? Math.round((arr.reduce((a, b) => a + b, 0) / arr.length / 4) * 100) : 50;
     return Object.fromEntries(Object.entries(totals).map(([k, v]) => [k, avg(v)]));
   }
 

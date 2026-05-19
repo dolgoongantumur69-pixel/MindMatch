@@ -221,10 +221,10 @@ export default function ProfilePage() {
         </Link>
         <div>
           <h1 className="text-xl font-extrabold" style={{ color: "#111827" }}>
-            Profile
+            Профайл
           </h1>
           <p className="text-xs" style={{ color: "#6B7280" }}>
-            Update your account
+            Мэдээллээ шинэчлэх
           </p>
         </div>
       </div>
@@ -344,24 +344,24 @@ export default function ProfilePage() {
       <form onSubmit={handleSave} className="space-y-5">
         <div className="rounded-2xl border p-6 space-y-4" style={{ background: "#FFFFFF", borderColor: "#E2E7EF" }}>
           <p className="text-sm font-bold" style={{ color: "#111827" }}>
-            Basic Info
+            Үндсэн мэдээлэл
           </p>
 
-          <Field label="Name" icon={<i className="fa-solid fa-user text-sm" />}>
+          <Field label="Нэр" icon={<i className="fa-solid fa-user text-sm" />}>
             <input
               style={inputStyle}
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="Your name"
+              placeholder="Таны нэр"
             />
           </Field>
 
-          <Field label="Email" icon={<i className="fa-solid fa-envelope text-sm" />}>
+          <Field label="Имэйл" icon={<i className="fa-solid fa-envelope text-sm" />}>
             <input style={{ ...inputStyle, opacity: 0.6, cursor: "not-allowed" }} value={data.email} disabled />
           </Field>
 
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Phone" icon={<i className="fa-solid fa-phone text-sm" />}>
+            <Field label="Утас" icon={<i className="fa-solid fa-phone text-sm" />}>
               <input
                 style={inputStyle}
                 value={form.phone}
@@ -369,23 +369,23 @@ export default function ProfilePage() {
                 placeholder="99xxxxxx"
               />
             </Field>
-            <Field label="Location" icon={<i className="fa-solid fa-location-dot text-sm" />}>
+            <Field label="Байршил" icon={<i className="fa-solid fa-location-dot text-sm" />}>
               <input
                 style={inputStyle}
                 value={form.location}
                 onChange={(e) => setForm({ ...form, location: e.target.value })}
-                placeholder="Ulaanbaatar"
+                placeholder="Улаанбаатар"
               />
             </Field>
           </div>
 
-          <Field label="Bio" icon={<i className="fa-solid fa-file-lines text-sm" />}>
+          <Field label="Танилцуулга" icon={<i className="fa-solid fa-file-lines text-sm" />}>
             <textarea
               rows={3}
               style={{ ...inputStyle, resize: "none" }}
               value={form.bio}
               onChange={(e) => setForm({ ...form, bio: e.target.value })}
-              placeholder="Short bio..."
+              placeholder="Өөрийгөө товч танилцуулна уу..."
             />
           </Field>
         </div>
@@ -395,31 +395,31 @@ export default function ProfilePage() {
             {isEmployer ? (
               <>
                 <p className="text-sm font-bold" style={{ color: "#111827" }}>
-                  Company Info
+                  Байгууллагын мэдээлэл
                 </p>
-                <Field label="Company Name" icon={<i className="fa-solid fa-building text-sm" />}>
+                <Field label="Байгууллагын нэр" icon={<i className="fa-solid fa-building text-sm" />}>
                   <input
                     style={inputStyle}
                     value={form.companyName}
                     onChange={(e) => setForm({ ...form, companyName: e.target.value })}
-                    placeholder="Company name"
+                    placeholder="Байгууллагын нэр"
                   />
                 </Field>
-                <Field label="Industry" icon={<i className="fa-solid fa-briefcase text-sm" />}>
+                <Field label="Салбар" icon={<i className="fa-solid fa-briefcase text-sm" />}>
                   <input
                     style={inputStyle}
                     value={form.industry}
                     onChange={(e) => setForm({ ...form, industry: e.target.value })}
-                    placeholder="Industry"
+                    placeholder="Салбар чиглэл"
                   />
                 </Field>
               </>
             ) : (
               <>
                 <p className="text-sm font-bold" style={{ color: "#111827" }}>
-                  Professional Info
+                  Мэргэжлийн мэдээлэл
                 </p>
-                <Field label="Skills" icon={<i className="fa-solid fa-tag text-sm" />}>
+                <Field label="Ур чадвар" icon={<i className="fa-solid fa-tag text-sm" />}>
                   <input
                     style={inputStyle}
                     value={form.skills}
@@ -427,13 +427,13 @@ export default function ProfilePage() {
                     placeholder="React, TypeScript..."
                   />
                 </Field>
-                <Field label="Experience" icon={<i className="fa-solid fa-briefcase text-sm" />}>
+                <Field label="Туршлага" icon={<i className="fa-solid fa-briefcase text-sm" />}>
                   <textarea
                     rows={4}
                     style={{ ...inputStyle, resize: "none" }}
                     value={form.experience}
                     onChange={(e) => setForm({ ...form, experience: e.target.value })}
-                    placeholder="Work experience..."
+                    placeholder="Ажлын туршлагаа оруулна уу..."
                   />
                 </Field>
               </>
@@ -455,17 +455,17 @@ export default function ProfilePage() {
           {saving ? (
             <>
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              Saving...
+              Хадгалж байна...
             </>
           ) : saved ? (
             <>
               <i className="fa-solid fa-check text-sm" />
-              Saved
+              Хадгалагдлаа
             </>
           ) : (
             <>
               <i className="fa-solid fa-floppy-disk text-sm" />
-              Save
+              Хадгалах
             </>
           )}
         </button>
