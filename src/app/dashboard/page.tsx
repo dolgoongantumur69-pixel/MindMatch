@@ -87,7 +87,7 @@ export default function DashboardPage() {
 
       {/* Welcome hero */}
       <div
-        className="rounded-2xl p-8 relative overflow-hidden"
+        className="rounded-2xl p-5 sm:p-8 relative overflow-hidden"
         style={{ background: "linear-gradient(135deg, #0D1117 0%, #1A2440 100%)" }}
       >
         <div
@@ -112,7 +112,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-3 gap-2 sm:gap-5">
         {[
           { label: "Нийт өргөдөл", value: applications.length, icon: BriefcaseIcon, color: "#4B7BF5", bg: "#EEF2FE" },
           { label: "Хүлээн авсан", value: accepted,             icon: TargetIcon,   color: "#059669", bg: "#F0FDF4" },
@@ -120,15 +120,15 @@ export default function DashboardPage() {
         ].map(({ label, value, icon: Icon, color, bg }, i) => (
           <div
             key={i}
-            className="rounded-2xl p-6 border flex flex-col gap-4"
+            className="rounded-2xl p-3 sm:p-6 border flex flex-col gap-2 sm:gap-4"
             style={{ background: "#FFFFFF", borderColor: "#E2E7EF" }}
           >
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: bg }}>
-              <Icon className="h-4 w-4" style={{ color }} />
+            <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center" style={{ background: bg }}>
+              <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" style={{ color }} />
             </div>
             <div>
-              <p className="text-2xl font-extrabold" style={{ color }}>{value}</p>
-              <p className="text-xs mt-0.5" style={{ color: "#6B7280" }}>{label}</p>
+              <p className="text-lg sm:text-2xl font-extrabold" style={{ color }}>{value}</p>
+              <p className="text-[10px] sm:text-xs mt-0.5" style={{ color: "#6B7280" }}>{label}</p>
             </div>
           </div>
         ))}
