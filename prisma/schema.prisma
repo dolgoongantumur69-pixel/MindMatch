@@ -115,3 +115,16 @@ model Application {
   @@index([jobId, createdAt(sort: Desc)])
   @@index([status, createdAt(sort: Desc)])
 }
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  referrer  String?
+  sessionId String
+  userId    String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt(sort: Desc)])
+  @@index([path, createdAt(sort: Desc)])
+  @@index([sessionId])
+}

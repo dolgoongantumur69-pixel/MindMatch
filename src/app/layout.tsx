@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import Navbar from "@/components/Navbar";
+import TrackPageView from "@/components/TrackPageView";
 
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body style={{ backgroundColor: "#FAF7F4" }}>
         <Providers>
+          <TrackPageView />
           <Navbar />
           <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-10">{children}</main>
           <footer className="mt-24 py-10 border-t" style={{ borderColor: "#ECD4BA" }}>

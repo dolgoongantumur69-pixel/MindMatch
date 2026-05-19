@@ -3,8 +3,20 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
+interface Analytics {
+  viewsToday: number;
+  viewsWeek: number;
+  viewsMonth: number;
+  uniqueVisitorsToday: number;
+  uniqueVisitorsWeek: number;
+  topPages: Array<{ path: string; count: number }>;
+  dailyViews: Array<{ date: string; count: number }>;
+  dailyNewUsers: Array<{ date: string; count: number }>;
+}
+
 interface OverviewData {
   metrics: { usersCount: number; jobsCount: number; applicationsCount: number };
+  analytics: Analytics;
   roleCounts: Array<{ role: string; _count: { role: number } }>;
   recentUsers: Array<{ id: string; name: string | null; email: string; role: string; createdAt: string }>;
   recentJobs: Array<{
@@ -32,9 +44,48 @@ const ROLE_COLOR: Record<string, string> = {
   ADMIN:     "#A855F7",
 };
 
+const PAGE_LABELS: Record<string, string> = {
+  "/":             "Нүүр хуудас",
+  "/jobs":         "Ажлын байр",
+  "/dashboard":    "Дашбоард",
+  "/profile":      "Профайл",
+  "/test":         "Тест",
+  "/assessment":   "Үнэлгээ",
+  "/professions":  "Мэргэжлүүд",
+  "/login":        "Нэвтрэх",
+  "/register":     "Бүртгүүлэх",
+};
+
 const CARD = "rounded-2xl border p-5" as const;
 const BORDER = "rgba(255,255,255,0.07)" as const;
 const SURFACE = "#0F1624" as const;
+
+function shortDate(iso: string) {
+  const d = new Date(iso);
+  return `${d.getMonth() + 1}/${d.getDate()}`;
+}
+
+function BarChart({ data, color }: { data: Array<{ date: string; count: number }>; color: string }) {
+  const max = Math.max(...data.map((d) => d.count), 1);
+  return (
+    <div className="flex items-end gap-1.5 h-20">
+      {data.map(({ date, count }) => (
+        <div key={date} className="flex-1 flex flex-col items-center gap-1 group relative">
+          <div
+            className="w-full rounded-t-sm transition-all"
+            style={{ height: `${Math.max((count / max) * 72, count > 0 ? 4 : 2)}px`, background: count > 0 ? color : "rgba(255,255,255,0.06)" }}
+          />
+          <span className="text-[9px]" style={{ color: "#374151" }}>{shortDate(date)}</span>
+          {/* Tooltip */}
+          <div className="absolute -top-7 left-1/2 -translate-x-1/2 hidden group-hover:flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap z-10"
+            style={{ background: "#1F2937", color: "#E5E7EB" }}>
+            {count}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function AdminDashboard() {
   const [data, setData]       = useState<OverviewData | null>(null);
@@ -73,6 +124,9 @@ export default function AdminDashboard() {
       </div>
     );
 
+  const an = data.analytics;
+  const topViewsCount = Math.max(...an.topPages.map((p) => p.count), 1);
+
   const stats = [
     { href: "/admin/users",        label: "Нийт хэрэглэгч", value: data.metrics.usersCount,        faIcon: "fa-users",          color: "#4B7BF5", glow: "rgba(75,123,245,0.15)"  },
     { href: "/admin/users?role=EMPLOYER", label: "Байгууллага", value: roleTotals.EMPLOYER,         faIcon: "fa-building",       color: "#22C55E", glow: "rgba(34,197,94,0.12)"   },
@@ -97,17 +151,14 @@ export default function AdminDashboard() {
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map(({ href, label, value, faIcon, color, glow }) => (
-          <Link
-            key={href}
-            href={href}
+          <Link key={href} href={href}
             className="rounded-2xl p-5 flex flex-col gap-4 transition-all hover:-translate-y-0.5 hover:shadow-lg group"
-            style={{ background: SURFACE, border: `1px solid ${BORDER}`, boxShadow: `0 0 0 0 ${glow}` }}
-          >
+            style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
             <div className="flex items-center justify-between">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: glow }}>
                 <i className={`fa-solid ${faIcon} text-base`} style={{ color }} />
               </div>
-              <i className="fa-solid fa-chart-line text-xs opacity-0 group-hover:opacity-100 transition-opacity" style={{ color }} />
+              <i className="fa-solid fa-arrow-up-right-from-square text-xs opacity-0 group-hover:opacity-60 transition-opacity" style={{ color }} />
             </div>
             <div>
               <p className="text-3xl font-extrabold text-white leading-none">{value.toLocaleString()}</p>
@@ -117,29 +168,113 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      {/* Role breakdown */}
-      <div className={CARD} style={{ background: SURFACE, borderColor: BORDER }}>
-        <div className="flex items-center gap-2 mb-5">
-          <i className="fa-solid fa-chart-simple text-sm" style={{ color: "#4B7BF5" }} />
-          <h2 className="text-sm font-bold text-white">Хэрэглэгчдийн бүтэц</h2>
-        </div>
-        <div className="grid grid-cols-3 gap-4">
-          {[
-            { label: "Ажил хайгч",  count: roleTotals.JOBSEEKER, color: "#4B7BF5", pct: data.metrics.usersCount ? Math.round(roleTotals.JOBSEEKER / data.metrics.usersCount * 100) : 0 },
-            { label: "Байгууллага", count: roleTotals.EMPLOYER,  color: "#22C55E", pct: data.metrics.usersCount ? Math.round(roleTotals.EMPLOYER  / data.metrics.usersCount * 100) : 0 },
-            { label: "Админ",       count: roleTotals.ADMIN,     color: "#A855F7", pct: data.metrics.usersCount ? Math.round(roleTotals.ADMIN     / data.metrics.usersCount * 100) : 0 },
-          ].map(({ label, count, color, pct }) => (
-            <div key={label} className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-xs font-medium" style={{ color: "#6B7280" }}>{label}</p>
-                <p className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ background: color + "20", color }}>{pct}%</p>
-              </div>
-              <p className="text-2xl font-extrabold" style={{ color }}>{count}</p>
-              <div className="mt-3 h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
-                <div className="h-full rounded-full" style={{ width: `${pct}%`, background: color }} />
-              </div>
+      {/* Analytics — views */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {[
+          { label: "Өнөөдрийн үзэлт",    value: an.viewsToday,           icon: "fa-eye",            color: "#4B7BF5", glow: "rgba(75,123,245,0.12)"  },
+          { label: "7 хоногийн үзэлт",    value: an.viewsWeek,            icon: "fa-chart-line",     color: "#22C55E", glow: "rgba(34,197,94,0.10)"   },
+          { label: "Сарын үзэлт",         value: an.viewsMonth,           icon: "fa-calendar-days",  color: "#F59E0B", glow: "rgba(245,158,11,0.10)"  },
+          { label: "Өнөөдрийн зочид",     value: an.uniqueVisitorsToday,  icon: "fa-user-check",     color: "#A855F7", glow: "rgba(168,85,247,0.10)" },
+        ].map(({ label, value, icon, color, glow }) => (
+          <div key={label} className="rounded-2xl p-4 flex items-center gap-3"
+            style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: glow }}>
+              <i className={`fa-solid ${icon} text-sm`} style={{ color }} />
             </div>
-          ))}
+            <div>
+              <p className="text-xl font-extrabold text-white leading-none">{value.toLocaleString()}</p>
+              <p className="text-[10px] mt-1 font-medium" style={{ color: "#4B5563" }}>{label}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Charts row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* Daily views chart */}
+        <div className={CARD} style={{ background: SURFACE, borderColor: BORDER }}>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <i className="fa-solid fa-chart-bar text-sm" style={{ color: "#4B7BF5" }} />
+              <h2 className="text-sm font-bold text-white">Өдрийн үзэлт (7 хоног)</h2>
+            </div>
+            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ background: "rgba(75,123,245,0.12)", color: "#4B7BF5" }}>
+              Нийт {an.viewsWeek.toLocaleString()}
+            </span>
+          </div>
+          <BarChart data={an.dailyViews} color="#4B7BF5" />
+        </div>
+
+        {/* Daily new users chart */}
+        <div className={CARD} style={{ background: SURFACE, borderColor: BORDER }}>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <i className="fa-solid fa-user-plus text-sm" style={{ color: "#22C55E" }} />
+              <h2 className="text-sm font-bold text-white">Шинэ хэрэглэгч (7 хоног)</h2>
+            </div>
+            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ background: "rgba(34,197,94,0.10)", color: "#22C55E" }}>
+              {an.dailyNewUsers.reduce((s, d) => s + d.count, 0)} нийт
+            </span>
+          </div>
+          <BarChart data={an.dailyNewUsers} color="#22C55E" />
+        </div>
+      </div>
+
+      {/* Top pages + Role breakdown */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* Top pages */}
+        <div className={CARD} style={{ background: SURFACE, borderColor: BORDER }}>
+          <div className="flex items-center gap-2 mb-4">
+            <i className="fa-solid fa-fire text-sm" style={{ color: "#F59E0B" }} />
+            <h2 className="text-sm font-bold text-white">Хамгийн их үзэлттэй хуудсууд</h2>
+          </div>
+          {an.topPages.length === 0 ? (
+            <p className="text-xs text-center py-6" style={{ color: "#374151" }}>Мэдээлэл байхгүй</p>
+          ) : (
+            <div className="space-y-2.5">
+              {an.topPages.map(({ path, count }) => {
+                const pct = Math.round((count / topViewsCount) * 100);
+                const label = PAGE_LABELS[path] ?? (path.startsWith("/jobs/") ? "Ажлын дэлгэрэнгүй" : path);
+                return (
+                  <div key={path}>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-medium truncate" style={{ color: "#D1D5DB" }}>{label}</span>
+                      <span className="text-xs font-bold ml-3 shrink-0" style={{ color: "#F59E0B" }}>{count.toLocaleString()}</span>
+                    </div>
+                    <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                      <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: "#F59E0B" }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Role breakdown */}
+        <div className={CARD} style={{ background: SURFACE, borderColor: BORDER }}>
+          <div className="flex items-center gap-2 mb-4">
+            <i className="fa-solid fa-chart-simple text-sm" style={{ color: "#4B7BF5" }} />
+            <h2 className="text-sm font-bold text-white">Хэрэглэгчдийн бүтэц</h2>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            {[
+              { label: "Ажил хайгч",  count: roleTotals.JOBSEEKER, color: "#4B7BF5", pct: data.metrics.usersCount ? Math.round(roleTotals.JOBSEEKER / data.metrics.usersCount * 100) : 0 },
+              { label: "Байгууллага", count: roleTotals.EMPLOYER,  color: "#22C55E", pct: data.metrics.usersCount ? Math.round(roleTotals.EMPLOYER  / data.metrics.usersCount * 100) : 0 },
+              { label: "Админ",       count: roleTotals.ADMIN,     color: "#A855F7", pct: data.metrics.usersCount ? Math.round(roleTotals.ADMIN     / data.metrics.usersCount * 100) : 0 },
+            ].map(({ label, count, color, pct }) => (
+              <div key={label} className="rounded-xl p-3.5" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-[10px] font-medium" style={{ color: "#6B7280" }}>{label}</p>
+                  <p className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ background: color + "20", color }}>{pct}%</p>
+                </div>
+                <p className="text-xl font-extrabold" style={{ color }}>{count}</p>
+                <div className="mt-2.5 h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                  <div className="h-full rounded-full" style={{ width: `${pct}%`, background: color }} />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -151,17 +286,16 @@ export default function AdminDashboard() {
           <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
             {data.recentUsers.slice(0, 6).map((u) => (
               <div key={u.id} className="px-4 py-3 flex items-center gap-3 hover:bg-white/[0.02] transition-colors">
-                <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 text-white"
-                  style={{ background: (ROLE_COLOR[u.role] ?? "#4B5563") + "30", color: ROLE_COLOR[u.role] ?? "#4B5563" }}
-                >
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0"
+                  style={{ background: (ROLE_COLOR[u.role] ?? "#4B5563") + "30", color: ROLE_COLOR[u.role] ?? "#4B5563" }}>
                   {(u.name?.[0] ?? u.email[0]).toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-semibold truncate text-white">{u.name ?? u.email}</p>
                   <p className="text-[10px] truncate" style={{ color: "#4B5563" }}>{u.email}</p>
                 </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0" style={{ background: (ROLE_COLOR[u.role] ?? "#4B5563") + "20", color: ROLE_COLOR[u.role] ?? "#4B5563" }}>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0"
+                  style={{ background: (ROLE_COLOR[u.role] ?? "#4B5563") + "20", color: ROLE_COLOR[u.role] ?? "#4B5563" }}>
                   {u.role === "JOBSEEKER" ? "Ажил хайгч" : u.role === "EMPLOYER" ? "Байгууллага" : "Админ"}
                 </span>
               </div>
@@ -177,19 +311,15 @@ export default function AdminDashboard() {
               <div key={j.id} className="px-4 py-3 hover:bg-white/[0.02] transition-colors">
                 <div className="flex items-start justify-between gap-2">
                   <p className="text-xs font-semibold text-white truncate">{j.title}</p>
-                  <span className="text-[10px] font-bold shrink-0 px-1.5 py-0.5 rounded" style={{
-                    background: j.isActive ? "rgba(34,197,94,0.12)" : "rgba(107,114,128,0.12)",
-                    color:      j.isActive ? "#22C55E"              : "#6B7280",
-                  }}>
+                  <span className="text-[10px] font-bold shrink-0 px-1.5 py-0.5 rounded"
+                    style={{ background: j.isActive ? "rgba(34,197,94,0.12)" : "rgba(107,114,128,0.12)", color: j.isActive ? "#22C55E" : "#6B7280" }}>
                     {j.isActive ? "Идэвхтэй" : "Идэвхгүй"}
                   </span>
                 </div>
                 <p className="text-[10px] mt-1 truncate" style={{ color: "#4B5563" }}>
                   {j.employer.profile?.companyName ?? j.employer.name ?? "Тодорхойгүй"}
                 </p>
-                <p className="text-[10px] mt-0.5" style={{ color: "#374151" }}>
-                  {j._count.applications} өргөдөл
-                </p>
+                <p className="text-[10px] mt-0.5" style={{ color: "#374151" }}>{j._count.applications} өргөдөл</p>
               </div>
             ))}
           </div>
