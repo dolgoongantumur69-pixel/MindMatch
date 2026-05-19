@@ -87,56 +87,60 @@ export default function ProfilePage() {
     return "/dashboard";
   }, [isEmployer, isAdmin]);
 
+  async function compressImage(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+        reject(new Error("Зөвхөн JPG, PNG, WEBP зургийг оруулна уу"));
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        reject(new Error("Зургийн хэмжээ 5MB-аас бага байх ёстой"));
+        return;
+      }
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        const MAX = 256;
+        const scale = Math.min(MAX / img.width, MAX / img.height, 1);
+        const canvas = document.createElement("canvas");
+        canvas.width  = Math.round(img.width  * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext("2d")!;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(url);
+        resolve(canvas.toDataURL("image/jpeg", 0.88));
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("Зураг уншихад алдаа гарлаа")); };
+      img.src = url;
+    });
+  }
+
   async function handleAvatarUpload(file: File | null) {
     if (!file) return;
     setAvatarError("");
     setUploadingAvatar(true);
-
-    const fd = new FormData();
-    fd.append("avatar", file);
-
     try {
-      const uploadRes = await fetch("/api/upload", { method: "POST", body: fd });
-      const uploadData = (await uploadRes.json()) as { url?: string; error?: string };
-      if (!uploadRes.ok || !uploadData.url) {
-        setAvatarError(uploadData.error ?? "Avatar upload failed");
-        setUploadingAvatar(false);
-        return;
-      }
-
-      const avatarUrl = uploadData.url;
+      const avatarUrl = await compressImage(file);
       const saveRes = await fetch("/api/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ avatarUrl }),
       });
-
       if (!saveRes.ok) {
-        setAvatarError("Avatar saved failed");
+        setAvatarError("Зураг хадгалахад алдаа гарлаа");
       } else {
         setForm((prev) => ({ ...prev, avatarUrl }));
         setData((prev) =>
-          prev
-            ? {
-                ...prev,
-                profile: prev.profile
-                  ? { ...prev.profile, avatarUrl }
-                  : {
-                      avatarUrl,
-                      bio: null,
-                      phone: null,
-                      location: null,
-                      skills: null,
-                      experience: null,
-                      companyName: null,
-                      industry: null,
-                    },
-              }
-            : prev
+          prev ? {
+            ...prev,
+            profile: prev.profile
+              ? { ...prev.profile, avatarUrl }
+              : { avatarUrl, bio: null, phone: null, location: null, skills: null, experience: null, companyName: null, industry: null },
+          } : prev
         );
       }
-    } catch {
-      setAvatarError("Avatar upload failed");
+    } catch (e) {
+      setAvatarError(e instanceof Error ? e.message : "Зураг оруулахад алдаа гарлаа");
     } finally {
       setUploadingAvatar(false);
     }
