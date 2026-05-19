@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { ChevronLeftIcon, ChevronRightIcon, ClipboardListIcon, TrashIcon } from "lucide-react";
 
 type AppStatus = "PENDING" | "REVIEWED" | "ACCEPTED" | "REJECTED";
 
@@ -72,7 +71,7 @@ export default function AdminApplicationsPage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(168,85,247,0.15)" }}>
-          <ClipboardListIcon className="h-5 w-5" style={{ color: "#A855F7" }} />
+          <i className="fa-solid fa-clipboard-list text-base" style={{ color: "#A855F7" }} />
         </div>
         <div>
           <h1 className="text-xl font-extrabold text-white">Өргөдлүүд</h1>
@@ -195,7 +194,7 @@ export default function AdminApplicationsPage() {
                             <button onClick={() => setConfirmDelete(app.id)}
                               className="p-1.5 rounded-lg transition-colors hover:bg-red-500/10"
                               style={{ color: "#374151" }}>
-                              <TrashIcon className="h-4 w-4" />
+                              <i className="fa-solid fa-trash text-sm" />
                             </button>
                           )}
                         </td>
@@ -215,12 +214,12 @@ export default function AdminApplicationsPage() {
                   <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}
                     className="p-1.5 rounded-lg disabled:opacity-30 transition-opacity hover:opacity-70"
                     style={{ background: "rgba(255,255,255,0.05)", color: "#E5E7EB" }}>
-                    <ChevronLeftIcon className="h-4 w-4" />
+                    <i className="fa-solid fa-chevron-left text-sm" />
                   </button>
                   <button onClick={() => setPage((p) => Math.min(data.totalPages, p + 1))} disabled={page === data.totalPages}
                     className="p-1.5 rounded-lg disabled:opacity-30 transition-opacity hover:opacity-70"
                     style={{ background: "rgba(255,255,255,0.05)", color: "#E5E7EB" }}>
-                    <ChevronRightIcon className="h-4 w-4" />
+                    <i className="fa-solid fa-chevron-right text-sm" />
                   </button>
                 </div>
               </div>

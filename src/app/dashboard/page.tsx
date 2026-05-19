@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { BrainCircuitIcon, BriefcaseIcon, TargetIcon, ArrowRightIcon, SparklesIcon, TrendingUpIcon, MapPinIcon, ClockIcon, CheckCircleIcon } from "lucide-react";
 import { calculateMatchScore } from "@/lib/psychology";
 
 const TRAIT_LABELS: Record<string, string> = {
@@ -114,17 +113,17 @@ export default function DashboardPage() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-2 sm:gap-5">
         {[
-          { label: "Нийт өргөдөл", value: applications.length, icon: BriefcaseIcon, color: "#4B7BF5", bg: "#EEF2FE" },
-          { label: "Хүлээн авсан", value: accepted,             icon: TargetIcon,   color: "#059669", bg: "#F0FDF4" },
-          { label: "Хянагдаж байна", value: reviewed,           icon: TrendingUpIcon,color: "#374151", bg: "#EEF2FE" },
-        ].map(({ label, value, icon: Icon, color, bg }, i) => (
+          { label: "Нийт өргөдөл", value: applications.length, faIcon: "fa-briefcase",  color: "#4B7BF5", bg: "#EEF2FE" },
+          { label: "Хүлээн авсан", value: accepted,             faIcon: "fa-bullseye",   color: "#059669", bg: "#F0FDF4" },
+          { label: "Хянагдаж байна", value: reviewed,           faIcon: "fa-chart-line", color: "#374151", bg: "#EEF2FE" },
+        ].map(({ label, value, faIcon, color, bg }, i) => (
           <div
             key={i}
             className="rounded-2xl p-3 sm:p-6 border flex flex-col gap-2 sm:gap-4"
             style={{ background: "#FFFFFF", borderColor: "#E2E7EF" }}
           >
             <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center" style={{ background: bg }}>
-              <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" style={{ color }} />
+              <i className={`fa-solid ${faIcon} text-xs sm:text-sm`} style={{ color }} />
             </div>
             <div>
               <p className="text-lg sm:text-2xl font-extrabold" style={{ color }}>{value}</p>
@@ -144,7 +143,7 @@ export default function DashboardPage() {
           >
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "#EEF2FE" }}>
-                <BrainCircuitIcon className="h-4 w-4" style={{ color: "#4B7BF5" }} />
+                <i className="fa-solid fa-brain text-sm" style={{ color: "#4B7BF5" }} />
               </div>
               <span className="font-bold text-sm" style={{ color: "#111827" }}>Сэтгэл зүйн профайл</span>
             </div>
@@ -154,7 +153,7 @@ export default function DashboardPage() {
               style={{ color: "#4B7BF5" }}
             >
               {assessment ? "Дахин өгөх" : "Тест өгөх"}
-              <ArrowRightIcon className="h-3 w-3" />
+              <i className="fa-solid fa-arrow-right text-xs" />
             </Link>
           </div>
 
@@ -189,7 +188,7 @@ export default function DashboardPage() {
                   className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4"
                   style={{ background: "#EEF2FE" }}
                 >
-                  <SparklesIcon className="h-8 w-8" style={{ color: "#4B7BF5" }} />
+                  <i className="fa-solid fa-wand-magic-sparkles text-2xl" style={{ color: "#4B7BF5" }} />
                 </div>
                 <p className="text-sm font-semibold mb-1" style={{ color: "#111827" }}>Тест өгөөгүй байна</p>
                 <p className="text-xs mb-5" style={{ color: "#6B7280" }}>15 асуулт, ~5 минут</p>
@@ -210,12 +209,12 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between p-5 border-b" style={{ borderColor: "#E2E7EF" }}>
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "#EEF2FE" }}>
-                <BriefcaseIcon className="h-4 w-4" style={{ color: "#374151" }} />
+                <i className="fa-solid fa-briefcase text-sm" style={{ color: "#374151" }} />
               </div>
               <span className="font-bold text-sm" style={{ color: "#111827" }}>Миний өргөдлүүд</span>
             </div>
             <Link href="/jobs" className="text-xs font-semibold flex items-center gap-1 hover:underline" style={{ color: "#4B7BF5" }}>
-              Ажил хайх <ArrowRightIcon className="h-3 w-3" />
+              Ажил хайх <i className="fa-solid fa-arrow-right text-xs" />
             </Link>
           </div>
 
@@ -223,7 +222,7 @@ export default function DashboardPage() {
             {applications.length === 0 ? (
               <div className="flex flex-col items-center py-10 text-center">
                 <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ background: "#EEF2FE" }}>
-                  <BriefcaseIcon className="h-8 w-8" style={{ color: "#374151" }} />
+                  <i className="fa-solid fa-briefcase text-2xl" style={{ color: "#374151" }} />
                 </div>
                 <p className="text-sm font-semibold mb-1" style={{ color: "#111827" }}>Өргөдөл гаргаагүй байна</p>
                 <p className="text-xs" style={{ color: "#6B7280" }}>Тохирох ажлаа хайж өргөдлөө илгээгээрэй</p>
@@ -256,7 +255,7 @@ export default function DashboardPage() {
                         </span>
                         {app.matchScore !== null && (
                           <span className="text-[10px] flex items-center gap-0.5" style={{ color: "#6B7280" }}>
-                            <TargetIcon className="h-2.5 w-2.5" /> {app.matchScore}% тохирно
+                            <i className="fa-solid fa-bullseye" style={{ fontSize: "10px" }} /> {app.matchScore}% тохирно
                           </span>
                         )}
                       </div>
@@ -274,7 +273,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between p-5 border-b" style={{ borderColor: "#E2E7EF" }}>
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "#FFF7ED" }}>
-              <SparklesIcon className="h-4 w-4" style={{ color: "#EA580C" }} />
+              <i className="fa-solid fa-wand-magic-sparkles text-sm" style={{ color: "#EA580C" }} />
             </div>
             <span className="font-bold text-sm" style={{ color: "#111827" }}>Боломжит тестүүд</span>
           </div>
@@ -286,7 +285,7 @@ export default function DashboardPage() {
             style={{ borderColor: "#E2E7EF", background: "#F7F8FA" }}
           >
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "#EEF2FE" }}>
-              <BrainCircuitIcon className="h-5 w-5" style={{ color: "#4B7BF5" }} />
+              <i className="fa-solid fa-brain text-base" style={{ color: "#4B7BF5" }} />
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-bold text-sm mb-0.5" style={{ color: "#111827" }}>Big Five (OCEAN) тест</p>
@@ -296,7 +295,7 @@ export default function DashboardPage() {
               {assessment ? (
                 <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full"
                   style={{ background: "#F0FDF4", color: "#16A34A" }}>
-                  <CheckCircleIcon className="h-3 w-3" /> Дууссан
+                  <i className="fa-solid fa-circle-check text-xs" /> Дууссан
                 </span>
               ) : (
                 <Link
@@ -304,7 +303,7 @@ export default function DashboardPage() {
                   className="inline-flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-lg text-white transition-all hover:opacity-90"
                   style={{ background: "linear-gradient(135deg, #4B7BF5, #3B6AE8)" }}
                 >
-                  Тест өгөх <ArrowRightIcon className="h-3 w-3" />
+                  Тест өгөх <i className="fa-solid fa-arrow-right text-xs" />
                 </Link>
               )}
             </div>
@@ -316,7 +315,7 @@ export default function DashboardPage() {
             style={{ borderColor: "#E2E7EF", background: "#F7F8FA" }}
           >
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "#FFF7ED" }}>
-              <TrendingUpIcon className="h-5 w-5" style={{ color: "#EA580C" }} />
+              <i className="fa-solid fa-chart-line text-base" style={{ color: "#EA580C" }} />
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-bold text-sm mb-0.5" style={{ color: "#111827" }}>Стресс тэсвэрлэх тест</p>
@@ -325,7 +324,7 @@ export default function DashboardPage() {
               </p>
               <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full"
                 style={{ background: "#F1F5F9", color: "#94A3B8" }}>
-                <ClockIcon className="h-3 w-3" /> Удахгүй
+                <i className="fa-solid fa-clock text-xs" /> Удахгүй
               </span>
             </div>
           </div>
@@ -337,12 +336,12 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between p-5 border-b" style={{ borderColor: "#E2E7EF" }}>
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "#EEF2FE" }}>
-              <BriefcaseIcon className="h-4 w-4" style={{ color: "#374151" }} />
+              <i className="fa-solid fa-briefcase text-sm" style={{ color: "#374151" }} />
             </div>
             <span className="font-bold text-sm" style={{ color: "#111827" }}>Санал болгох ажлууд</span>
           </div>
           <Link href="/jobs" className="text-xs font-semibold flex items-center gap-1 hover:underline" style={{ color: "#4B7BF5" }}>
-            Бүгдийг харах <ArrowRightIcon className="h-3 w-3" />
+            Бүгдийг харах <i className="fa-solid fa-arrow-right text-xs" />
           </Link>
         </div>
         <div className="p-5">
@@ -383,8 +382,8 @@ export default function DashboardPage() {
                       <p className="text-xs font-semibold" style={{ color: "#4B7BF5" }}>{companyName}</p>
                     )}
                     <div className="flex items-center gap-3 text-xs" style={{ color: "#6B7280" }}>
-                      <span className="flex items-center gap-1"><MapPinIcon className="h-3 w-3" />{job.location}</span>
-                      <span className="flex items-center gap-1"><BriefcaseIcon className="h-3 w-3" />{job.jobType}</span>
+                      <span className="flex items-center gap-1"><i className="fa-solid fa-location-dot text-xs" />{job.location}</span>
+                      <span className="flex items-center gap-1"><i className="fa-solid fa-briefcase text-xs" />{job.jobType}</span>
                     </div>
                     {job.salary && (
                       <p className="text-xs font-semibold" style={{ color: "#374151" }}>{job.salary}</p>

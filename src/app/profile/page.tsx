@@ -4,20 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  ArrowLeftIcon,
-  BuildingIcon,
-  CameraIcon,
-  CheckIcon,
-  FileTextIcon,
-  MailIcon,
-  MapPinIcon,
-  PhoneIcon,
-  SaveIcon,
-  TagIcon,
-  UserIcon,
-  BriefcaseIcon,
-} from "lucide-react";
 
 interface ProfileData {
   name: string;
@@ -191,7 +177,7 @@ export default function ProfilePage() {
           className="p-2 rounded-xl transition-all hover:opacity-70"
           style={{ background: "#F0FDFA", color: "#4B7BF5" }}
         >
-          <ArrowLeftIcon className="h-4 w-4" />
+          <i className="fa-solid fa-arrow-left text-sm" />
         </Link>
         <div>
           <h1 className="text-xl font-extrabold" style={{ color: "#111827" }}>
@@ -229,7 +215,7 @@ export default function ProfilePage() {
             style={{ background: "#EEF2FE", borderColor: "#D5E3FC", color: "#4B7BF5" }}
             title="Upload avatar"
           >
-            <CameraIcon className="h-3.5 w-3.5" />
+            <i className="fa-solid fa-camera text-xs" />
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp"
@@ -269,7 +255,7 @@ export default function ProfilePage() {
             Basic Info
           </p>
 
-          <Field label="Name" icon={<UserIcon className="h-4 w-4" />}>
+          <Field label="Name" icon={<i className="fa-solid fa-user text-sm" />}>
             <input
               style={inputStyle}
               value={form.name}
@@ -278,12 +264,12 @@ export default function ProfilePage() {
             />
           </Field>
 
-          <Field label="Email" icon={<MailIcon className="h-4 w-4" />}>
+          <Field label="Email" icon={<i className="fa-solid fa-envelope text-sm" />}>
             <input style={{ ...inputStyle, opacity: 0.6, cursor: "not-allowed" }} value={data.email} disabled />
           </Field>
 
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Phone" icon={<PhoneIcon className="h-4 w-4" />}>
+            <Field label="Phone" icon={<i className="fa-solid fa-phone text-sm" />}>
               <input
                 style={inputStyle}
                 value={form.phone}
@@ -291,7 +277,7 @@ export default function ProfilePage() {
                 placeholder="99xxxxxx"
               />
             </Field>
-            <Field label="Location" icon={<MapPinIcon className="h-4 w-4" />}>
+            <Field label="Location" icon={<i className="fa-solid fa-location-dot text-sm" />}>
               <input
                 style={inputStyle}
                 value={form.location}
@@ -301,7 +287,7 @@ export default function ProfilePage() {
             </Field>
           </div>
 
-          <Field label="Bio" icon={<FileTextIcon className="h-4 w-4" />}>
+          <Field label="Bio" icon={<i className="fa-solid fa-file-lines text-sm" />}>
             <textarea
               rows={3}
               style={{ ...inputStyle, resize: "none" }}
@@ -319,7 +305,7 @@ export default function ProfilePage() {
                 <p className="text-sm font-bold" style={{ color: "#111827" }}>
                   Company Info
                 </p>
-                <Field label="Company Name" icon={<BuildingIcon className="h-4 w-4" />}>
+                <Field label="Company Name" icon={<i className="fa-solid fa-building text-sm" />}>
                   <input
                     style={inputStyle}
                     value={form.companyName}
@@ -327,7 +313,7 @@ export default function ProfilePage() {
                     placeholder="Company name"
                   />
                 </Field>
-                <Field label="Industry" icon={<BriefcaseIcon className="h-4 w-4" />}>
+                <Field label="Industry" icon={<i className="fa-solid fa-briefcase text-sm" />}>
                   <input
                     style={inputStyle}
                     value={form.industry}
@@ -341,7 +327,7 @@ export default function ProfilePage() {
                 <p className="text-sm font-bold" style={{ color: "#111827" }}>
                   Professional Info
                 </p>
-                <Field label="Skills" icon={<TagIcon className="h-4 w-4" />}>
+                <Field label="Skills" icon={<i className="fa-solid fa-tag text-sm" />}>
                   <input
                     style={inputStyle}
                     value={form.skills}
@@ -349,7 +335,7 @@ export default function ProfilePage() {
                     placeholder="React, TypeScript..."
                   />
                 </Field>
-                <Field label="Experience" icon={<BriefcaseIcon className="h-4 w-4" />}>
+                <Field label="Experience" icon={<i className="fa-solid fa-briefcase text-sm" />}>
                   <textarea
                     rows={4}
                     style={{ ...inputStyle, resize: "none" }}
@@ -381,12 +367,12 @@ export default function ProfilePage() {
             </>
           ) : saved ? (
             <>
-              <CheckIcon className="h-4 w-4" />
+              <i className="fa-solid fa-check text-sm" />
               Saved
             </>
           ) : (
             <>
-              <SaveIcon className="h-4 w-4" />
+              <i className="fa-solid fa-floppy-disk text-sm" />
               Save
             </>
           )}

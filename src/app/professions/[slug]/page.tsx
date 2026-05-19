@@ -5,15 +5,6 @@ import {
   CATEGORIES,
   getProfessionBySlug,
 } from "@/data/professions";
-import {
-  ArrowLeftIcon,
-  BriefcaseIcon,
-  GraduationCapIcon,
-  TrendingUpIcon,
-  WrenchIcon,
-  SparklesIcon,
-  UsersIcon,
-} from "lucide-react";
 
 export async function generateStaticParams() {
   return PROFESSIONS.map((p) => ({ slug: p.slug }));
@@ -54,7 +45,7 @@ export default async function ProfessionDetailPage({
         className="inline-flex items-center gap-2 text-sm mb-6 hover:text-white transition-colors"
         style={{ color: "#6B7280" }}
       >
-        <ArrowLeftIcon className="h-4 w-4" />
+        <i className="fa-solid fa-arrow-left text-sm" />
         Мэргэжлүүд рүү буцах
       </Link>
 
@@ -106,11 +97,11 @@ export default async function ProfessionDetailPage({
       {/* ── Stats row ── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
         {[
-          { icon: BriefcaseIcon,    label: "Цалин",        value: prof.salaryRange },
-          { icon: GraduationCapIcon, label: "Боловсрол",   value: prof.education },
-          { icon: TrendingUpIcon,   label: "IQ шаардлага", value: EQ_IQ_LABELS[prof.iqRequirement] },
-          { icon: UsersIcon,        label: "EQ шаардлага", value: EQ_IQ_LABELS[prof.eqRequirement] },
-        ].map(({ icon: Icon, label, value }) => (
+          { faIcon: "fa-briefcase",      label: "Цалин",        value: prof.salaryRange },
+          { faIcon: "fa-graduation-cap", label: "Боловсрол",   value: prof.education },
+          { faIcon: "fa-chart-line",     label: "IQ шаардлага", value: EQ_IQ_LABELS[prof.iqRequirement] },
+          { faIcon: "fa-users",          label: "EQ шаардлага", value: EQ_IQ_LABELS[prof.eqRequirement] },
+        ].map(({ faIcon, label, value }) => (
           <div
             key={label}
             className="rounded-xl p-4"
@@ -120,7 +111,7 @@ export default async function ProfessionDetailPage({
             }}
           >
             <div className="flex items-center gap-2 mb-2">
-              <Icon className="h-4 w-4" style={{ color: "#4B7BF5" }} />
+              <i className={`fa-solid ${faIcon} text-sm`} style={{ color: "#4B7BF5" }} />
               <span className="text-xs" style={{ color: "#6B7280" }}>
                 {label}
               </span>
@@ -141,7 +132,7 @@ export default async function ProfessionDetailPage({
           }}
         >
           <div className="flex items-center gap-2 mb-4">
-            <SparklesIcon className="h-4 w-4" style={{ color: "#4B7BF5" }} />
+            <i className="fa-solid fa-wand-magic-sparkles text-sm" style={{ color: "#4B7BF5" }} />
             <h2 className="text-sm font-semibold text-white">Шаардлагатай ур чадварууд</h2>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -166,7 +157,7 @@ export default async function ProfessionDetailPage({
           }}
         >
           <div className="flex items-center gap-2 mb-4">
-            <WrenchIcon className="h-4 w-4" style={{ color: "#D97706" }} />
+            <i className="fa-solid fa-wrench text-sm" style={{ color: "#D97706" }} />
             <h2 className="text-sm font-semibold text-white">Хэрэглэдэг хэрэгслүүд</h2>
           </div>
           <div className="flex flex-wrap gap-2">

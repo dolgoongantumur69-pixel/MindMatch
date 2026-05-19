@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { FilterIcon, SearchIcon } from "lucide-react";
 import { CATEGORIES, PROFESSIONS, type CategoryKey, type DemandLevel } from "@/data/professions";
 
 const DEMAND_LABELS: Record<DemandLevel, { label: string; color: string; bg: string }> = {
@@ -49,7 +48,7 @@ export default function ProfessionsClient() {
 
       {/* Search */}
       <div className="relative mb-6">
-        <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: "#6B7280" }} />
+        <i className="fa-solid fa-magnifying-glass text-sm absolute left-4 top-1/2 -translate-y-1/2" style={{ color: "#6B7280" }} />
         <input
           type="text"
           placeholder="Мэргэжил, ур чадвар хайх..."
@@ -92,7 +91,7 @@ export default function ProfessionsClient() {
           })}
         </div>
         <div className="flex items-center gap-2 ml-auto">
-          <FilterIcon className="h-4 w-4" style={{ color: "#6B7280" }} />
+          <i className="fa-solid fa-filter text-sm" style={{ color: "#6B7280" }} />
           <select value={demand} onChange={(e) => setDemand(e.target.value as DemandLevel | "all")}
             className="text-xs rounded-lg px-3 py-1.5 outline-none"
             style={{ background: "#1A2440", border: "1px solid rgba(255,255,255,0.08)", color: "#E5E7EB" }}>

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { BrainCircuitIcon, ArrowLeftIcon, SaveIcon } from "lucide-react";
 
 const CATEGORIES = ["IT & Технологи", "Санхүү", "Маркетинг", "Боловсрол", "Эрүүл мэнд", "Инженерчлэл", "Бусад"];
 const JOB_TYPES  = ["Бүтэн цагийн", "Хагас цагийн", "Зайнаас", "Гэрээт", "Дадлагажигч"];
@@ -99,7 +98,7 @@ export default function EditJobPage() {
           className="p-2 rounded-xl transition-all hover:opacity-70"
           style={{ background: "#F0EBE4", color: "var(--dark)" }}
         >
-          <ArrowLeftIcon className="h-4 w-4" />
+          <i className="fa-solid fa-arrow-left text-sm" />
         </Link>
         <div>
           <h1 className="text-2xl font-extrabold" style={{ color: "var(--dark)" }}>Ажлын байр засах</h1>
@@ -173,7 +172,7 @@ export default function EditJobPage() {
           <div className="p-5 border-b" style={{ background: "var(--dark)", borderColor: "#1E293B" }}>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(99,102,241,0.2)" }}>
-                <BrainCircuitIcon className="h-4 w-4" style={{ color: "var(--accent)" }} />
+                <i className="fa-solid fa-brain text-sm" style={{ color: "var(--accent)" }} />
               </div>
               <div>
                 <h2 className="font-bold text-white text-sm">Сэтгэл зүйн шаардлага</h2>
@@ -218,7 +217,7 @@ export default function EditJobPage() {
         >
           {saving
             ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Хадгалж байна...</>
-            : <><SaveIcon className="h-4 w-4" /> Хадгалах</>}
+            : <><i className="fa-solid fa-floppy-disk text-sm" /> Хадгалах</>}
         </button>
       </form>
     </div>

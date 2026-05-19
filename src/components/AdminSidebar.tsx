@@ -2,20 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  BriefcaseIcon,
-  ClipboardListIcon,
-  LayoutDashboardIcon,
-  ShieldCheckIcon,
-  UsersIcon,
-  ZapIcon,
-} from "lucide-react";
 
 const NAV = [
-  { href: "/admin",              label: "Дашбоард",    icon: LayoutDashboardIcon, exact: true  },
-  { href: "/admin/users",        label: "Хэрэглэгчид", icon: UsersIcon,           exact: false },
-  { href: "/admin/jobs",         label: "Ажлын байр",  icon: BriefcaseIcon,       exact: false },
-  { href: "/admin/applications", label: "Өргөдлүүд",   icon: ClipboardListIcon,   exact: false },
+  { href: "/admin",              label: "Дашбоард",    faIcon: "fa-gauge-high",      exact: true  },
+  { href: "/admin/users",        label: "Хэрэглэгчид", faIcon: "fa-users",           exact: false },
+  { href: "/admin/jobs",         label: "Ажлын байр",  faIcon: "fa-briefcase",       exact: false },
+  { href: "/admin/applications", label: "Өргөдлүүд",   faIcon: "fa-clipboard-list",  exact: false },
+  { href: "/admin/ai",           label: "AI Туслагч",  faIcon: "fa-robot",           exact: false },
 ];
 
 export default function AdminSidebar({ email, name }: { email: string; name: string }) {
@@ -38,7 +31,7 @@ export default function AdminSidebar({ email, name }: { email: string; name: str
             className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
             style={{ background: "linear-gradient(135deg,#4B7BF5,#7C3AED)" }}
           >
-            <ZapIcon className="h-4 w-4 text-white" />
+            <i className="fa-solid fa-bolt text-sm text-white" />
           </div>
           <div>
             <p className="text-sm font-extrabold text-white tracking-tight">MindMatch</p>
@@ -54,7 +47,7 @@ export default function AdminSidebar({ email, name }: { email: string; name: str
         <p className="text-[9px] font-bold tracking-widest uppercase px-3 mb-3" style={{ color: "#1F2937" }}>
           Үндсэн цэс
         </p>
-        {NAV.map(({ href, label, icon: Icon, exact }) => {
+        {NAV.map(({ href, label, faIcon, exact }) => {
           const on = active(href, exact);
           return (
             <Link
@@ -67,7 +60,7 @@ export default function AdminSidebar({ email, name }: { email: string; name: str
                 borderLeft: `2px solid ${on ? "#4B7BF5" : "transparent"}`,
               }}
             >
-              <Icon className="h-4 w-4 shrink-0" style={{ color: on ? "#4B7BF5" : "#374151" }} />
+              <i className={`fa-solid ${faIcon} text-sm shrink-0`} style={{ color: on ? "#4B7BF5" : "#374151" }} />
               {label}
               {on && <span className="ml-auto w-1.5 h-1.5 rounded-full" style={{ background: "#4B7BF5" }} />}
             </Link>
@@ -91,7 +84,7 @@ export default function AdminSidebar({ email, name }: { email: string; name: str
             <p className="text-xs font-semibold text-white truncate">{name || "Admin"}</p>
             <p className="text-[10px] truncate" style={{ color: "#374151" }}>{email}</p>
           </div>
-          <ShieldCheckIcon className="h-3.5 w-3.5 shrink-0" style={{ color: "#4B7BF5" }} />
+          <i className="fa-solid fa-shield text-xs shrink-0" style={{ color: "#4B7BF5" }} />
         </div>
       </div>
     </div>

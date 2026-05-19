@@ -2,10 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
-import {
-  BrainCircuitIcon, SendIcon, BotIcon, XIcon, SparklesIcon,
-  Trash2Icon, CornerUpLeftIcon, CopyIcon, CheckIcon,
-} from "lucide-react";
 import { useAIDrawer } from "@/context/AIDrawerContext";
 
 interface Message {
@@ -109,16 +105,16 @@ export default function AIChatDrawer() {
       const decoder = new TextDecoder();
       let full = "";
       let updateTimer: NodeJS.Timeout | null = null;
-      
+
       const updateUI = () => {
         setMessages([...next, { ...assistantMsg, content: full }]);
       };
-      
+
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
         full += decoder.decode(value, { stream: true });
-        
+
         // Batch updates: only update UI every 100ms instead of every chunk
         if (!updateTimer) {
           updateTimer = setTimeout(() => {
@@ -127,7 +123,7 @@ export default function AIChatDrawer() {
           }, 100);
         }
       }
-      
+
       // Final update to ensure all content is rendered
       if (updateTimer) clearTimeout(updateTimer);
       updateUI();
@@ -172,7 +168,7 @@ export default function AIChatDrawer() {
             className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
             style={{ background: "linear-gradient(135deg, #4B7BF5, #0F766E)" }}
           >
-            <BrainCircuitIcon className="h-4 w-4 text-white" />
+            <i className="fa-solid fa-brain text-sm text-white" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-extrabold text-sm" style={{ color: "#111827" }}>MindMatch AI</p>
@@ -207,7 +203,7 @@ export default function AIChatDrawer() {
                 style={{ background: "#FEF2F2", color: "#EF4444" }}
                 title="Чат цэвэрлэх"
               >
-                <Trash2Icon className="h-3.5 w-3.5" />
+                <i className="fa-solid fa-trash text-xs" />
               </button>
             )
           )}
@@ -217,7 +213,7 @@ export default function AIChatDrawer() {
             className="p-2 rounded-xl transition-all hover:opacity-70"
             style={{ background: "#F0F0F5", color: "#6B7280" }}
           >
-            <XIcon className="h-4 w-4" />
+            <i className="fa-solid fa-xmark text-sm" />
           </button>
         </div>
 
@@ -229,7 +225,7 @@ export default function AIChatDrawer() {
                 className="w-14 h-14 rounded-2xl flex items-center justify-center"
                 style={{ background: "linear-gradient(135deg, #4B7BF5, #0F766E)" }}
               >
-                <SparklesIcon className="h-7 w-7 text-white" />
+                <i className="fa-solid fa-wand-magic-sparkles text-xl text-white" />
               </div>
               <div>
                 <p className="font-extrabold mb-1" style={{ color: "#111827" }}>
@@ -266,7 +262,7 @@ export default function AIChatDrawer() {
                   className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
                   style={{ background: "linear-gradient(135deg, #4B7BF5, #0F766E)" }}
                 >
-                  <BotIcon className="h-3.5 w-3.5 text-white" />
+                  <i className="fa-solid fa-robot text-xs text-white" />
                 </div>
               )}
 
@@ -311,7 +307,7 @@ export default function AIChatDrawer() {
                       className="flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] transition-all hover:opacity-80"
                       style={{ background: "#EEF2FE", color: "#4B7BF5" }}
                     >
-                      <CornerUpLeftIcon className="h-2.5 w-2.5" />Хариулах
+                      <i className="fa-solid fa-reply" style={{ fontSize: "10px" }} />Хариулах
                     </button>
                     <button
                       onClick={() => copy(msg)}
@@ -319,8 +315,8 @@ export default function AIChatDrawer() {
                       style={{ background: "#F3F4F6", color: "#6B7280" }}
                     >
                       {copiedId === msg.id
-                        ? <><CheckIcon className="h-2.5 w-2.5" />Хуулагдлаа</>
-                        : <><CopyIcon className="h-2.5 w-2.5" />Хуулах</>
+                        ? <><i className="fa-solid fa-check" style={{ fontSize: "10px" }} />Хуулагдлаа</>
+                        : <><i className="fa-solid fa-copy" style={{ fontSize: "10px" }} />Хуулах</>
                       }
                     </button>
                   </div>
@@ -351,12 +347,12 @@ export default function AIChatDrawer() {
               className="flex items-start gap-2 mb-2 px-3 py-2 rounded-xl"
               style={{ background: "#EEF2FE", borderLeft: "3px solid #4B7BF5" }}
             >
-              <CornerUpLeftIcon className="h-3 w-3 mt-0.5 shrink-0" style={{ color: "#4B7BF5" }} />
+              <i className="fa-solid fa-reply mt-0.5 shrink-0" style={{ color: "#4B7BF5", fontSize: "10px" }} />
               <p className="text-[11px] flex-1 truncate" style={{ color: "#374151" }}>
                 {replyTo.content.slice(0, 100)}{replyTo.content.length > 100 ? "…" : ""}
               </p>
               <button onClick={() => setReplyTo(null)} style={{ color: "#9CA3AF" }}>
-                <XIcon className="h-3 w-3" />
+                <i className="fa-solid fa-xmark" style={{ fontSize: "10px" }} />
               </button>
             </div>
           )}
@@ -385,7 +381,7 @@ export default function AIChatDrawer() {
               className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all hover:opacity-80 disabled:opacity-40"
               style={{ background: "linear-gradient(135deg, #4B7BF5, #0F766E)" }}
             >
-              <SendIcon className="h-3.5 w-3.5 text-white" />
+              <i className="fa-solid fa-paper-plane text-xs text-white" />
             </button>
           </div>
         </div>

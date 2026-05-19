@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { BriefcaseIcon, MapPinIcon, SearchIcon, UsersIcon, ArrowRightIcon, SlidersHorizontalIcon } from "lucide-react";
 
 interface Job {
   id: string; title: string; location: string; salary: string | null;
@@ -77,7 +76,7 @@ export default function JobsPage() {
         />
         <div className="relative p-8">
           <div className="flex items-center gap-2 mb-1">
-            <BriefcaseIcon className="h-4 w-4" style={{ color: "#FBE0C3" }} />
+            <i className="fa-solid fa-briefcase text-sm" style={{ color: "#FBE0C3" }} />
             <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "#FBE0C3" }}>Ажлын байрууд</span>
           </div>
           <h1 className="text-2xl font-extrabold text-white mb-1">Тохирох ажлаа олоорой</h1>
@@ -86,7 +85,7 @@ export default function JobsPage() {
           </p>
           <form onSubmit={(e) => { e.preventDefault(); fetchJobs(); }} className="flex gap-2">
             <div className="relative flex-1">
-              <SearchIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: "#FBE0C3" }} />
+              <i className="fa-solid fa-magnifying-glass text-sm absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#FBE0C3" }} />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -100,7 +99,7 @@ export default function JobsPage() {
               className="px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all hover:opacity-90"
               style={{ background: "#FFBB98", color: "#344648", boxShadow: "0 2px 10px rgba(255,187,152,0.40)" }}
             >
-              <SlidersHorizontalIcon className="h-4 w-4" /> Хайх
+              <i className="fa-solid fa-sliders text-sm" /> Хайх
             </button>
           </form>
         </div>
@@ -133,7 +132,7 @@ export default function JobsPage() {
         </div>
       ) : jobs.length === 0 ? (
         <div className="text-center py-28" style={{ color: "#607D7B" }}>
-          <BriefcaseIcon className="h-12 w-12 mx-auto mb-4 opacity-20" />
+          <i className="fa-solid fa-briefcase" style={{ fontSize: "3rem", display: "block", marginBottom: "1rem", opacity: 0.2 }} />
           <p className="text-sm">Ажлын байр олдсонгүй</p>
         </div>
       ) : (
@@ -166,8 +165,8 @@ export default function JobsPage() {
                     </p>
                     <p className="text-xs mt-0.5 font-medium" style={{ color: "#7D8E95" }}>{company}</p>
                     <div className="flex items-center gap-4 mt-1.5 text-xs" style={{ color: "#7D8E95" }}>
-                      <span className="flex items-center gap-1"><MapPinIcon className="h-3 w-3" />{job.location}</span>
-                      <span className="flex items-center gap-1"><UsersIcon className="h-3 w-3" />{job._count.applications} өргөдөл</span>
+                      <span className="flex items-center gap-1"><i className="fa-solid fa-location-dot text-xs" />{job.location}</span>
+                      <span className="flex items-center gap-1"><i className="fa-solid fa-users text-xs" />{job._count.applications} өргөдөл</span>
                     </div>
                   </div>
                 </div>
@@ -183,7 +182,7 @@ export default function JobsPage() {
                     className="w-8 h-8 rounded-full flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"
                     style={{ background: "#FBE0C3" }}
                   >
-                    <ArrowRightIcon className="h-4 w-4" style={{ color: "#344648" }} />
+                    <i className="fa-solid fa-arrow-right text-sm" style={{ color: "#344648" }} />
                   </div>
                 </div>
               </Link>

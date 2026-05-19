@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { ChevronLeftIcon, ChevronRightIcon, SearchIcon, TrashIcon, UsersIcon } from "lucide-react";
 
 type Role = "JOBSEEKER" | "EMPLOYER" | "ADMIN";
 
@@ -69,7 +68,7 @@ export default function AdminUsersPage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(75,123,245,0.15)" }}>
-          <UsersIcon className="h-5 w-5" style={{ color: "#4B7BF5" }} />
+          <i className="fa-solid fa-users text-base" style={{ color: "#4B7BF5" }} />
         </div>
         <div>
           <h1 className="text-xl font-extrabold text-white">Хэрэглэгчид</h1>
@@ -84,7 +83,7 @@ export default function AdminUsersPage() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <SearchIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: "#374151" }} />
+          <i className="fa-solid fa-magnifying-glass text-sm absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#374151" }} />
           <input type="text" placeholder="Нэр эсвэл имэйлээр хайх..." value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
             className="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl outline-none"
@@ -184,7 +183,7 @@ export default function AdminUsersPage() {
                             <button onClick={() => setConfirmDelete(user.id)}
                               className="p-1.5 rounded-lg transition-colors hover:bg-red-500/10"
                               style={{ color: "#374151" }}>
-                              <TrashIcon className="h-4 w-4" />
+                              <i className="fa-solid fa-trash text-sm" />
                             </button>
                           )}
                         </td>
@@ -204,12 +203,12 @@ export default function AdminUsersPage() {
                   <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}
                     className="p-1.5 rounded-lg disabled:opacity-30 transition-opacity hover:opacity-70"
                     style={{ background: "rgba(255,255,255,0.05)", color: "#E5E7EB" }}>
-                    <ChevronLeftIcon className="h-4 w-4" />
+                    <i className="fa-solid fa-chevron-left text-sm" />
                   </button>
                   <button onClick={() => setPage((p) => Math.min(data.totalPages, p + 1))} disabled={page === data.totalPages}
                     className="p-1.5 rounded-lg disabled:opacity-30 transition-opacity hover:opacity-70"
                     style={{ background: "rgba(255,255,255,0.05)", color: "#E5E7EB" }}>
-                    <ChevronRightIcon className="h-4 w-4" />
+                    <i className="fa-solid fa-chevron-right text-sm" />
                   </button>
                 </div>
               </div>

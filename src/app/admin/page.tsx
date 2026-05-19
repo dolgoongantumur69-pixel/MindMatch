@@ -2,11 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import {
-  ArrowRightIcon, BriefcaseIcon, BuildingIcon,
-  ClipboardListIcon, UsersIcon, TrendingUpIcon,
-  ActivityIcon, CircleIcon,
-} from "lucide-react";
 
 interface OverviewData {
   metrics: { usersCount: number; jobsCount: number; applicationsCount: number };
@@ -79,10 +74,10 @@ export default function AdminDashboard() {
     );
 
   const stats = [
-    { href: "/admin/users",        label: "Нийт хэрэглэгч", value: data.metrics.usersCount,        icon: UsersIcon,        color: "#4B7BF5", glow: "rgba(75,123,245,0.15)"  },
-    { href: "/admin/users?role=EMPLOYER", label: "Байгууллага", value: roleTotals.EMPLOYER,         icon: BuildingIcon,     color: "#22C55E", glow: "rgba(34,197,94,0.12)"   },
-    { href: "/admin/jobs",         label: "Ажлын байр",      value: data.metrics.jobsCount,         icon: BriefcaseIcon,    color: "#F59E0B", glow: "rgba(245,158,11,0.12)"  },
-    { href: "/admin/applications", label: "Өргөдлүүд",       value: data.metrics.applicationsCount, icon: ClipboardListIcon, color: "#A855F7", glow: "rgba(168,85,247,0.12)" },
+    { href: "/admin/users",        label: "Нийт хэрэглэгч", value: data.metrics.usersCount,        faIcon: "fa-users",          color: "#4B7BF5", glow: "rgba(75,123,245,0.15)"  },
+    { href: "/admin/users?role=EMPLOYER", label: "Байгууллага", value: roleTotals.EMPLOYER,         faIcon: "fa-building",       color: "#22C55E", glow: "rgba(34,197,94,0.12)"   },
+    { href: "/admin/jobs",         label: "Ажлын байр",      value: data.metrics.jobsCount,         faIcon: "fa-briefcase",      color: "#F59E0B", glow: "rgba(245,158,11,0.12)"  },
+    { href: "/admin/applications", label: "Өргөдлүүд",       value: data.metrics.applicationsCount, faIcon: "fa-clipboard-list", color: "#A855F7", glow: "rgba(168,85,247,0.12)" },
   ];
 
   return (
@@ -101,7 +96,7 @@ export default function AdminDashboard() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map(({ href, label, value, icon: Icon, color, glow }) => (
+        {stats.map(({ href, label, value, faIcon, color, glow }) => (
           <Link
             key={href}
             href={href}
@@ -110,9 +105,9 @@ export default function AdminDashboard() {
           >
             <div className="flex items-center justify-between">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: glow }}>
-                <Icon className="h-5 w-5" style={{ color }} />
+                <i className={`fa-solid ${faIcon} text-base`} style={{ color }} />
               </div>
-              <TrendingUpIcon className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color }} />
+              <i className="fa-solid fa-chart-line text-xs opacity-0 group-hover:opacity-100 transition-opacity" style={{ color }} />
             </div>
             <div>
               <p className="text-3xl font-extrabold text-white leading-none">{value.toLocaleString()}</p>
@@ -125,7 +120,7 @@ export default function AdminDashboard() {
       {/* Role breakdown */}
       <div className={CARD} style={{ background: SURFACE, borderColor: BORDER }}>
         <div className="flex items-center gap-2 mb-5">
-          <ActivityIcon className="h-4 w-4" style={{ color: "#4B7BF5" }} />
+          <i className="fa-solid fa-chart-simple text-sm" style={{ color: "#4B7BF5" }} />
           <h2 className="text-sm font-bold text-white">Хэрэглэгчдийн бүтэц</h2>
         </div>
         <div className="grid grid-cols-3 gap-4">
@@ -211,7 +206,7 @@ export default function AdminDashboard() {
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <p className="text-xs font-semibold text-white truncate">{a.user.name ?? a.user.email}</p>
                     <span className="flex items-center gap-1 text-[10px] font-semibold shrink-0" style={{ color: st.dot }}>
-                      <CircleIcon className="h-1.5 w-1.5 fill-current" />
+                      <i className="fa-solid fa-circle" style={{ fontSize: "6px" }} />
                       {st.label}
                     </span>
                   </div>
@@ -231,7 +226,7 @@ function TableHeader({ label, href }: { label: string; href: string }) {
     <div className="px-4 py-3.5 flex items-center justify-between border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
       <h2 className="text-xs font-bold text-white uppercase tracking-wide">{label}</h2>
       <Link href={href} className="flex items-center gap-1 text-[11px] font-semibold transition-opacity hover:opacity-70" style={{ color: "#4B7BF5" }}>
-        Бүгдийг харах <ArrowRightIcon className="h-3 w-3" />
+        Бүгдийг харах <i className="fa-solid fa-arrow-right text-xs" />
       </Link>
     </div>
   );

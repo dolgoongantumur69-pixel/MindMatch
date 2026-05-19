@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { BrainCircuitIcon, CheckIcon, SparklesIcon, ArrowRightIcon, ArrowLeftIcon } from "lucide-react";
 import { getRecommendedProfessions, CATEGORIES, type RequirementLevel } from "@/data/professions";
 
 /* ─────────────────────────── types ─────────────────────────── */
@@ -344,7 +343,6 @@ const MBTI: Record<string, { name: string; desc: string }> = {
 
 /* ─────────────────────────── scoring ─────────────────────────── */
 function calcResults(answers: Record<number, string>) {
-  // MBTI — 2 questions per dimension, majority vote
   const dim = (q1: number, q2: number, a: string, b: string) => {
     const v1 = answers[q1];
     const v2 = answers[q2];
@@ -389,7 +387,6 @@ export default function TestPage() {
   const q        = QUESTIONS[index];
   const progress = (index / QUESTIONS.length) * 100;
 
-  // Slide animation helpers
   function animateAndGo(dir: "left" | "right", cb: () => void) {
     setSlideDir(dir);
     setSlideState("exit");
@@ -424,7 +421,6 @@ export default function TestPage() {
     });
   }
 
-  // Preload enter transition
   useEffect(() => {
     if (slideState === "enter") {
       const t = setTimeout(() => setSlideState("idle"), 280);
@@ -450,7 +446,7 @@ export default function TestPage() {
         <div className="rounded-3xl overflow-hidden border" style={{ borderColor: "#E2E7EF", background: "#FFFFFF" }}>
           <div className="p-8" style={{ background: "linear-gradient(135deg, #0D1117 0%, #1A2440 100%)" }}>
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style={{ background: "rgba(75,123,245,0.25)" }}>
-              <BrainCircuitIcon className="h-6 w-6" style={{ color: "#93B8FC" }} />
+              <i className="fa-solid fa-brain text-lg" style={{ color: "#93B8FC" }} />
             </div>
             <h1 className="text-2xl font-extrabold text-white">Хувийн тест</h1>
             <p className="text-sm mt-2" style={{ color: "#9CA3AF" }}>
@@ -507,7 +503,7 @@ export default function TestPage() {
       <div className="max-w-lg mx-auto py-10 space-y-4">
         <div className="text-center mb-2">
           <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style={{ background: "#ECFDF3" }}>
-            <CheckIcon className="h-7 w-7" style={{ color: "#16A34A" }} />
+            <i className="fa-solid fa-check text-xl" style={{ color: "#16A34A" }} />
           </div>
           <h1 className="text-xl font-extrabold" style={{ color: "#111827" }}>Таны үр дүн</h1>
           <p className="text-sm mt-1" style={{ color: "#9CA3AF" }}>30 асуултад хариулсан</p>
@@ -538,7 +534,7 @@ export default function TestPage() {
         {/* Career recommendations */}
         <div className="rounded-2xl overflow-hidden border" style={{ borderColor: "rgba(75,123,245,0.25)" }}>
           <div className="px-4 py-3 flex items-center gap-2" style={{ background: "linear-gradient(135deg, #0D1117 0%, #1A2440 100%)" }}>
-            <SparklesIcon className="h-4 w-4" style={{ color: "#93B8FC" }} />
+            <i className="fa-solid fa-wand-magic-sparkles text-sm" style={{ color: "#93B8FC" }} />
             <span className="text-sm font-bold text-white">Таны мэргэжлийн зөвлөмж</span>
             <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: "rgba(75,123,245,0.30)", color: "#93B8FC" }}>
               {mbtiType} · IQ {iqLabel} · EQ {eqLabel}
@@ -566,7 +562,7 @@ export default function TestPage() {
                     }}>
                       {p.demandLevel === "high" ? "Эрэлт өндөр" : p.demandLevel === "medium" ? "Дунд" : "Бага"}
                     </span>
-                    <ArrowRightIcon className="h-3.5 w-3.5" style={{ color: "#D1D5DB" }} />
+                    <i className="fa-solid fa-arrow-right text-xs" style={{ color: "#D1D5DB" }} />
                   </div>
                 </Link>
               );
@@ -574,7 +570,7 @@ export default function TestPage() {
           </div>
           <div className="px-4 py-3" style={{ background: "#F9FAFB", borderTop: "1px solid #F3F4F6" }}>
             <Link href="/professions" className="flex items-center justify-center gap-1.5 text-xs font-semibold hover:opacity-80" style={{ color: "#4B7BF5" }}>
-              Бүх мэргэжлийг үзэх <ArrowRightIcon className="h-3.5 w-3.5" />
+              Бүх мэргэжлийг үзэх <i className="fa-solid fa-arrow-right text-xs" />
             </Link>
           </div>
         </div>
@@ -615,7 +611,7 @@ export default function TestPage() {
                     color: done || active ? "#FFFFFF" : "#9CA3AF",
                   }}
                 >
-                  {done ? <CheckIcon className="h-3.5 w-3.5" /> : i + 1}
+                  {done ? <i className="fa-solid fa-check text-xs" /> : i + 1}
                 </div>
                 <span className="text-xs font-semibold hidden sm:inline" style={{ color: active ? st.text : "#9CA3AF" }}>
                   {sec}
@@ -651,7 +647,7 @@ export default function TestPage() {
         >
           {q.section === "IQ" && (
             <div className="flex items-center gap-1.5 mb-4">
-              <SparklesIcon className="h-3.5 w-3.5" style={{ color: "#F59E0B" }} />
+              <i className="fa-solid fa-wand-magic-sparkles text-xs" style={{ color: "#F59E0B" }} />
               <span className="text-[11px] font-semibold" style={{ color: "#F59E0B" }}>Нэг зөв хариулт байна</span>
             </div>
           )}
@@ -683,7 +679,7 @@ export default function TestPage() {
                       color:      isSelected ? "#FFFFFF" : "#9CA3AF",
                     }}
                   >
-                    {isSelected ? <CheckIcon className="h-4 w-4" /> : letters[i]}
+                    {isSelected ? <i className="fa-solid fa-check text-sm" /> : letters[i]}
                   </span>
                   <span className="text-sm font-medium" style={{ color: isSelected ? ss.text : "#374151" }}>
                     {opt.text}
@@ -703,7 +699,7 @@ export default function TestPage() {
           className="mt-4 flex items-center gap-1.5 text-xs font-semibold mx-auto transition-opacity hover:opacity-70 disabled:opacity-30"
           style={{ color: "#9CA3AF" }}
         >
-          <ArrowLeftIcon className="h-3.5 w-3.5" /> Өмнөх асуулт
+          <i className="fa-solid fa-arrow-left text-xs" /> Өмнөх асуулт
         </button>
       )}
     </div>

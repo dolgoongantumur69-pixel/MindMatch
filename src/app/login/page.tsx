@@ -4,7 +4,6 @@ import { useState, Suspense } from "react";
 import { signIn, getSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { BrainCircuitIcon, EyeIcon, EyeOffIcon, ArrowRightIcon } from "lucide-react";
 
 function LoginForm() {
   const router = useRouter();
@@ -49,7 +48,7 @@ function LoginForm() {
           {/* Logo */}
           <div className="flex items-center justify-center gap-2 mb-8">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: "#111827" }}>
-              <BrainCircuitIcon className="h-5 w-5 text-white" />
+              <i className="fa-solid fa-brain text-base text-white" />
             </div>
             <span className="text-xl font-extrabold" style={{ color: "#111827" }}>
               Mind<span style={{ color: "#4B7BF5" }}>Match</span>
@@ -104,7 +103,7 @@ function LoginForm() {
                   className="absolute right-3 top-1/2 -translate-y-1/2"
                   style={{ color: "#9CA3AF" }}
                 >
-                  {showPass ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
+                  {showPass ? <i className="fa-solid fa-eye-slash text-sm" /> : <i className="fa-solid fa-eye text-sm" />}
                 </button>
               </div>
             </div>
@@ -118,7 +117,7 @@ function LoginForm() {
               {loading ? (
                 <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Нэвтэрж байна...</>
               ) : (
-                <>Нэвтрэх <ArrowRightIcon className="h-4 w-4" /></>
+                <>Нэвтрэх <i className="fa-solid fa-arrow-right text-sm" /></>
               )}
             </button>
           </form>

@@ -4,11 +4,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import {
-  BrainCircuitIcon, BriefcaseIcon, LogOutIcon, PlusIcon,
-  LayoutDashboardIcon, SparklesIcon, SettingsIcon, BotIcon,
-  BookOpenIcon, MenuIcon, XIcon,
-} from "lucide-react";
 import { useAIDrawer } from "@/context/AIDrawerContext";
 
 export default function Navbar() {
@@ -80,7 +75,7 @@ export default function Navbar() {
             <Link href="/" className="flex items-center gap-2 font-bold text-base shrink-0">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center"
                 style={{ background: glass ? "rgba(255,255,255,0.15)" : "#111827", border: glass ? "1px solid rgba(255,255,255,0.25)" : "none" }}>
-                <BrainCircuitIcon className="h-4 w-4 text-white" />
+                <i className="fa-solid fa-brain text-sm text-white" />
               </div>
               <span style={{ color: glass ? "#FFFFFF" : "#111827" }}>
                 Mind<span style={{ color: "#4B7BF5" }}>Match</span>
@@ -89,21 +84,21 @@ export default function Navbar() {
 
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-1">
-              <NavLink href="/professions" label="Мэргэжлүүд" icon={<BookOpenIcon className="h-4 w-4" />} />
-              <NavLink href="/jobs"        label="Ажлын байр" icon={<BriefcaseIcon className="h-4 w-4" />} />
+              <NavLink href="/professions" label="Мэргэжлүүд" icon={<i className="fa-solid fa-book-open text-sm" />} />
+              <NavLink href="/jobs"        label="Ажлын байр" icon={<i className="fa-solid fa-briefcase text-sm" />} />
 
               {session ? (
                 <>
                   {session.user.role === "JOBSEEKER" && (
                     <>
-                      <NavLink href="/assessment" label="Тест"    icon={<SparklesIcon className="h-4 w-4" />} />
+                      <NavLink href="/assessment" label="Тест"    icon={<i className="fa-solid fa-wand-magic-sparkles text-sm" />} />
                       <button onClick={toggleAI}
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all hover:opacity-80"
                         style={{ color: glass ? "#93B8FC" : "#4B7BF5", background: glass ? "rgba(75,123,245,0.15)" : "#EEF2FE" }}>
-                        <BotIcon className="h-4 w-4" />AI
+                        <i className="fa-solid fa-robot text-sm" />AI
                       </button>
-                      <NavLink href="/dashboard" label="Самбар"  icon={<LayoutDashboardIcon className="h-4 w-4" />} />
-                      <NavLink href="/profile"   label="Профайл" icon={<SettingsIcon className="h-4 w-4" />} />
+                      <NavLink href="/dashboard" label="Самбар"  icon={<i className="fa-solid fa-gauge-high text-sm" />} />
+                      <NavLink href="/profile"   label="Профайл" icon={<i className="fa-solid fa-gear text-sm" />} />
                     </>
                   )}
                   {session.user.role === "EMPLOYER" && (
@@ -111,15 +106,15 @@ export default function Navbar() {
                       <Link href="/employer/post-job"
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all"
                         style={{ color: glass ? "#93B8FC" : "#4B7BF5", background: glass ? "rgba(75,123,245,0.15)" : "#EEF2FE" }}>
-                        <PlusIcon className="h-4 w-4" />Ажил нийтлэх
+                        <i className="fa-solid fa-plus text-sm" />Ажил нийтлэх
                       </Link>
                       <button onClick={toggleAI}
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all hover:opacity-80"
                         style={{ color: glass ? "#93B8FC" : "#4B7BF5", background: glass ? "rgba(75,123,245,0.15)" : "#EEF2FE" }}>
-                        <BotIcon className="h-4 w-4" />AI
+                        <i className="fa-solid fa-robot text-sm" />AI
                       </button>
-                      <NavLink href="/employer/dashboard" label="Самбар"  icon={<LayoutDashboardIcon className="h-4 w-4" />} />
-                      <NavLink href="/profile"            label="Профайл" icon={<SettingsIcon className="h-4 w-4" />} />
+                      <NavLink href="/employer/dashboard" label="Самбар"  icon={<i className="fa-solid fa-gauge-high text-sm" />} />
+                      <NavLink href="/profile"            label="Профайл" icon={<i className="fa-solid fa-gear text-sm" />} />
                     </>
                   )}
 
@@ -132,7 +127,7 @@ export default function Navbar() {
                     <button onClick={() => signOut({ callbackUrl: "/" })}
                       className="p-1.5 rounded-lg transition-all hover:bg-gray-100"
                       style={{ color: glass ? "rgba(255,255,255,0.70)" : "#9CA3AF" }} title="Гарах">
-                      <LogOutIcon className="h-3.5 w-3.5" />
+                      <i className="fa-solid fa-right-from-bracket text-xs" />
                     </button>
                   </div>
                 </>
@@ -164,7 +159,7 @@ export default function Navbar() {
                 className="p-2 rounded-xl transition-all"
                 style={{ color: glass ? "#FFFFFF" : "#374151", background: glass ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.04)" }}
               >
-                {menuOpen ? <XIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
+                {menuOpen ? <i className="fa-solid fa-xmark text-base" /> : <i className="fa-solid fa-bars text-base" />}
               </button>
             </div>
 
@@ -194,35 +189,35 @@ export default function Navbar() {
         }}
       >
         <div className="px-4 py-4 space-y-1">
-          <NavLink mobile href="/professions" label="Мэргэжлүүд" icon={<BookOpenIcon className="h-4 w-4" />} />
-          <NavLink mobile href="/jobs"        label="Ажлын байр" icon={<BriefcaseIcon className="h-4 w-4" />} />
+          <NavLink mobile href="/professions" label="Мэргэжлүүд" icon={<i className="fa-solid fa-book-open text-sm" />} />
+          <NavLink mobile href="/jobs"        label="Ажлын байр" icon={<i className="fa-solid fa-briefcase text-sm" />} />
 
           {session ? (
             <>
               {session.user.role === "JOBSEEKER" && (
                 <>
-                  <NavLink mobile href="/assessment" label="Тест"    icon={<SparklesIcon className="h-4 w-4" />} />
-                  <NavLink mobile href="/dashboard"  label="Самбар"  icon={<LayoutDashboardIcon className="h-4 w-4" />} />
-                  <NavLink mobile href="/profile"    label="Профайл" icon={<SettingsIcon className="h-4 w-4" />} />
+                  <NavLink mobile href="/assessment" label="Тест"    icon={<i className="fa-solid fa-wand-magic-sparkles text-sm" />} />
+                  <NavLink mobile href="/dashboard"  label="Самбар"  icon={<i className="fa-solid fa-gauge-high text-sm" />} />
+                  <NavLink mobile href="/profile"    label="Профайл" icon={<i className="fa-solid fa-gear text-sm" />} />
                   <button onClick={() => { toggleAI(); setMenuOpen(false); }}
                     className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all"
                     style={{ color: "#4B7BF5", background: "#EEF2FE" }}>
-                    <BotIcon className="h-4 w-4" />AI Туслагч
+                    <i className="fa-solid fa-robot text-sm" />AI Туслагч
                   </button>
                 </>
               )}
               {session.user.role === "EMPLOYER" && (
                 <>
-                  <NavLink mobile href="/employer/post-job"   label="Ажил нийтлэх" icon={<PlusIcon className="h-4 w-4" />} />
-                  <NavLink mobile href="/employer/dashboard"  label="Самбар"        icon={<LayoutDashboardIcon className="h-4 w-4" />} />
-                  <NavLink mobile href="/profile"             label="Профайл"       icon={<SettingsIcon className="h-4 w-4" />} />
+                  <NavLink mobile href="/employer/post-job"   label="Ажил нийтлэх" icon={<i className="fa-solid fa-plus text-sm" />} />
+                  <NavLink mobile href="/employer/dashboard"  label="Самбар"        icon={<i className="fa-solid fa-gauge-high text-sm" />} />
+                  <NavLink mobile href="/profile"             label="Профайл"       icon={<i className="fa-solid fa-gear text-sm" />} />
                 </>
               )}
               <div className="pt-2 mt-2 border-t" style={{ borderColor: "#F3F4F6" }}>
                 <button onClick={() => { signOut({ callbackUrl: "/" }); setMenuOpen(false); }}
                   className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all"
                   style={{ color: "#EF4444" }}>
-                  <LogOutIcon className="h-4 w-4" />Гарах
+                  <i className="fa-solid fa-right-from-bracket text-sm" />Гарах
                 </button>
               </div>
             </>

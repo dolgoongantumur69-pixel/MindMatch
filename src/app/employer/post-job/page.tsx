@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { BrainCircuitIcon } from "lucide-react";
 
 const CATEGORIES = ["IT & Технологи", "Санхүү", "Маркетинг", "Боловсрол", "Эрүүл мэнд", "Инженерчлэл", "Бусад"];
 const JOB_TYPES = ["Бүтэн цагийн", "Хагас цагийн", "Зайнаас", "Гэрээт", "Дадлагажигч"];
@@ -120,7 +119,7 @@ export default function PostJobPage() {
           <div className="p-5 border-b" style={{ background: "var(--dark)", borderColor: "#1E293B" }}>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(99,102,241,0.2)" }}>
-                <BrainCircuitIcon className="h-4 w-4" style={{ color: "var(--accent)" }} />
+                <i className="fa-solid fa-brain text-sm" style={{ color: "var(--accent)" }} />
               </div>
               <div>
                 <h2 className="font-bold text-white text-sm">Сэтгэл зүйн шаардлага</h2>

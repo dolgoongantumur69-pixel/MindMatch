@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { BriefcaseIcon, UsersIcon, TargetIcon, PlusIcon, ArrowRightIcon, CheckCircleIcon, XCircleIcon, EyeIcon, FileTextIcon, PencilIcon, Trash2Icon } from "lucide-react";
 
 interface Job {
   id: string; title: string; location: string;
@@ -83,7 +82,7 @@ export default function EmployerDashboard() {
           className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
           style={{ background: "var(--accent)" }}
         >
-          <PlusIcon className="h-4 w-4" />
+          <i className="fa-solid fa-plus text-sm" />
           Ажил нийтлэх
         </Link>
       </div>
@@ -91,12 +90,12 @@ export default function EmployerDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "Нийт ажил", value: jobs.length, icon: BriefcaseIcon, color: "var(--accent)" },
-          { label: "Нийт өргөдөл", value: applications.length, icon: UsersIcon, color: "#059669" },
-          { label: "Хүлээн авсан", value: applications.filter(a => a.status === "ACCEPTED").length, icon: TargetIcon, color: "#EA580C" },
-        ].map(({ label, value, icon: Icon, color }, i) => (
+          { label: "Нийт ажил", value: jobs.length, faIcon: "fa-briefcase", color: "var(--accent)" },
+          { label: "Нийт өргөдөл", value: applications.length, faIcon: "fa-users", color: "#059669" },
+          { label: "Хүлээн авсан", value: applications.filter(a => a.status === "ACCEPTED").length, faIcon: "fa-bullseye", color: "#EA580C" },
+        ].map(({ label, value, faIcon, color }, i) => (
           <div key={i} className="rounded-2xl p-5 border" style={{ background: "var(--surface)", borderColor: "var(--border)" }}>
-            <Icon className="h-5 w-5 mb-3" style={{ color }} />
+            <i className={`fa-solid ${faIcon} text-base mb-3`} style={{ color, display: "block" }} />
             <p className="text-2xl font-extrabold mb-0.5" style={{ color }}>{value}</p>
             <p className="text-xs" style={{ color: "var(--muted)" }}>{label}</p>
           </div>
@@ -108,7 +107,7 @@ export default function EmployerDashboard() {
         <div className="flex items-center justify-between p-5 border-b" style={{ borderColor: "var(--border)" }}>
           <span className="font-bold text-sm" style={{ color: "var(--dark)" }}>Миний ажлын байрууд</span>
           <Link href="/jobs" className="text-xs font-semibold flex items-center gap-1 hover:underline" style={{ color: "var(--accent)" }}>
-            Бүгдийг харах <ArrowRightIcon className="h-3 w-3" />
+            Бүгдийг харах <i className="fa-solid fa-arrow-right text-xs" />
           </Link>
         </div>
         <div className="p-5">
@@ -146,7 +145,7 @@ export default function EmployerDashboard() {
                         style={{ background: "#EFF6FF", color: "#2563EB" }}
                         title="Засах"
                       >
-                        <PencilIcon className="h-3.5 w-3.5" />
+                        <i className="fa-solid fa-pencil text-xs" />
                       </Link>
                       <button
                         onClick={() => setConfirmDeleteId(job.id)}
@@ -154,7 +153,7 @@ export default function EmployerDashboard() {
                         style={{ background: "#FEF2F2", color: "#DC2626" }}
                         title="Устгах"
                       >
-                        <Trash2Icon className="h-3.5 w-3.5" />
+                        <i className="fa-solid fa-trash text-xs" />
                       </button>
                     </div>
                   </div>
@@ -215,7 +214,7 @@ export default function EmployerDashboard() {
                             className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full mt-1"
                             style={{ background: "var(--accent-s)", color: "var(--accent)" }}
                           >
-                            <TargetIcon className="h-2.5 w-2.5" />
+                            <i className="fa-solid fa-bullseye text-xs" />
                             {app.matchScore}% тохирно
                           </span>
                         )}
@@ -233,7 +232,7 @@ export default function EmployerDashboard() {
                           className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all"
                           style={{ background: "#F5F3FF", color: "#4338CA" }}
                         >
-                          <FileTextIcon className="h-3 w-3" /> CV харах
+                          <i className="fa-solid fa-file-lines text-xs" /> CV харах
                         </a>
                       )}
                       <button
@@ -242,7 +241,7 @@ export default function EmployerDashboard() {
                         className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all disabled:opacity-40"
                         style={{ background: "#EFF6FF", color: "#1D4ED8" }}
                       >
-                        <EyeIcon className="h-3 w-3" /> Хянах
+                        <i className="fa-solid fa-eye text-xs" /> Хянах
                       </button>
                       <button
                         onClick={() => updateStatus(app.id, "ACCEPTED")}
@@ -250,7 +249,7 @@ export default function EmployerDashboard() {
                         className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all disabled:opacity-40"
                         style={{ background: "#F0FDF4", color: "#15803D" }}
                       >
-                        <CheckCircleIcon className="h-3 w-3" /> Хүлээн авах
+                        <i className="fa-solid fa-circle-check text-xs" /> Хүлээн авах
                       </button>
                       <button
                         onClick={() => updateStatus(app.id, "REJECTED")}
@@ -258,7 +257,7 @@ export default function EmployerDashboard() {
                         className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all disabled:opacity-40"
                         style={{ background: "#FEF2F2", color: "#DC2626" }}
                       >
-                        <XCircleIcon className="h-3 w-3" /> Татгалзах
+                        <i className="fa-solid fa-circle-xmark text-xs" /> Татгалзах
                       </button>
                     </div>
                   </div>

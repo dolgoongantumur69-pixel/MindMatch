@@ -4,10 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  BrainCircuitIcon, ArrowLeftIcon, SendIcon,
-  SparklesIcon, UserIcon, BotIcon,
-} from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
@@ -119,13 +115,13 @@ export default function AIPage() {
           className="p-2 rounded-xl transition-all hover:opacity-70"
           style={{ background: "#F0FDFA", color: "#4B7BF5" }}
         >
-          <ArrowLeftIcon className="h-4 w-4" />
+          <i className="fa-solid fa-arrow-left text-sm" />
         </Link>
         <div
           className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0"
           style={{ background: "linear-gradient(135deg, #4B7BF5, #0F766E)" }}
         >
-          <BrainCircuitIcon className="h-5 w-5 text-white" />
+          <i className="fa-solid fa-brain text-base text-white" />
         </div>
         <div>
           <p className="font-extrabold text-sm" style={{ color: "#111827" }}>MindMatch AI</p>
@@ -144,7 +140,7 @@ export default function AIPage() {
               className="w-16 h-16 rounded-3xl flex items-center justify-center"
               style={{ background: "linear-gradient(135deg, #4B7BF5, #0F766E)" }}
             >
-              <SparklesIcon className="h-8 w-8 text-white" />
+              <i className="fa-solid fa-wand-magic-sparkles text-xl text-white" />
             </div>
             <div>
               <p className="text-lg font-extrabold mb-1" style={{ color: "#111827" }}>
@@ -181,7 +177,7 @@ export default function AIPage() {
                 className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
                 style={{ background: "linear-gradient(135deg, #4B7BF5, #0F766E)" }}
               >
-                <BotIcon className="h-4 w-4 text-white" />
+                <i className="fa-solid fa-robot text-sm text-white" />
               </div>
             )}
 
@@ -217,7 +213,7 @@ export default function AIPage() {
                 className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold text-white"
                 style={{ background: "#374151" }}
               >
-                {session?.user?.name?.[0]?.toUpperCase() ?? <UserIcon className="h-4 w-4" />}
+                {session?.user?.name?.[0]?.toUpperCase() ?? <i className="fa-solid fa-user text-sm" />}
               </div>
             )}
           </div>
@@ -254,7 +250,7 @@ export default function AIPage() {
             className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all hover:opacity-80 disabled:opacity-40"
             style={{ background: "linear-gradient(135deg, #4B7BF5, #0F766E)" }}
           >
-            <SendIcon className="h-4 w-4 text-white" />
+            <i className="fa-solid fa-paper-plane text-sm text-white" />
           </button>
         </div>
         <p className="text-[11px] text-center mt-2" style={{ color: "#9CA3AF" }}>

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { MapPinIcon, BriefcaseIcon, CalendarIcon, TargetIcon, ArrowLeftIcon, CheckCircleIcon, UploadIcon, FileTextIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 
 interface Job {
@@ -80,7 +79,7 @@ export default function JobDetailPage() {
   return (
     <div className="max-w-3xl mx-auto space-y-5">
       <Link href="/jobs" className="inline-flex items-center gap-1.5 text-sm hover:underline" style={{ color: "var(--muted)" }}>
-        <ArrowLeftIcon className="h-3.5 w-3.5" />
+        <i className="fa-solid fa-arrow-left text-xs" />
         Буцах
       </Link>
 
@@ -115,12 +114,12 @@ export default function JobDetailPage() {
 
         <div className="flex flex-wrap gap-5 mt-6 pt-5" style={{ borderTop: "1px solid #1E293B" }}>
           {[
-            { icon: MapPinIcon, text: job.location },
-            { icon: BriefcaseIcon, text: job.jobType },
-            { icon: CalendarIcon, text: new Date(job.createdAt).toLocaleDateString("mn-MN") },
-          ].map(({ icon: Icon, text }, i) => (
+            { faIcon: "fa-location-dot", text: job.location },
+            { faIcon: "fa-briefcase",    text: job.jobType },
+            { faIcon: "fa-calendar-days", text: new Date(job.createdAt).toLocaleDateString("mn-MN") },
+          ].map(({ faIcon, text }, i) => (
             <span key={i} className="flex items-center gap-1.5 text-sm" style={{ color: "#64748B" }}>
-              <Icon className="h-4 w-4" />
+              <i className={`fa-solid ${faIcon} text-sm`} />
               {text}
             </span>
           ))}
@@ -146,11 +145,11 @@ export default function JobDetailPage() {
       {/* Apply section */}
       {applied ? (
         <div className="rounded-2xl p-8 text-center" style={{ background: "#F0FDF4", border: "1px solid #BBF7D0" }}>
-          <CheckCircleIcon className="h-12 w-12 mx-auto mb-3" style={{ color: "#16A34A" }} />
+          <i className="fa-solid fa-circle-check" style={{ color: "#16A34A", fontSize: "3rem", display: "block", marginBottom: "0.75rem" }} />
           <p className="font-bold text-lg mb-2" style={{ color: "#15803D" }}>Өргөдөл амжилттай илгээлээ!</p>
           {matchScore !== null && (
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold" style={{ background: "var(--accent-s)", color: "var(--accent)" }}>
-              <TargetIcon className="h-4 w-4" />
+              <i className="fa-solid fa-bullseye text-sm" />
               Таны тохирох хувь: {matchScore}%
             </div>
           )}
@@ -184,7 +183,7 @@ export default function JobDetailPage() {
                 </label>
                 {cvFile ? (
                   <div className="flex items-center gap-3 px-4 py-3 rounded-xl border-2" style={{ borderColor: "#6366F1", background: "#EEF2FF" }}>
-                    <FileTextIcon className="h-5 w-5 shrink-0" style={{ color: "#6366F1" }} />
+                    <i className="fa-solid fa-file-lines text-base shrink-0" style={{ color: "#6366F1" }} />
                     <span className="text-sm font-medium flex-1 truncate" style={{ color: "#4338CA" }}>{cvFile.name}</span>
                     <button
                       type="button"
@@ -192,7 +191,7 @@ export default function JobDetailPage() {
                       className="p-0.5 rounded-full hover:bg-indigo-200 transition-colors"
                       style={{ color: "#6366F1" }}
                     >
-                      <XIcon className="h-4 w-4" />
+                      <i className="fa-solid fa-xmark text-sm" />
                     </button>
                   </div>
                 ) : (
@@ -200,7 +199,7 @@ export default function JobDetailPage() {
                     className="flex flex-col items-center gap-2 px-4 py-6 rounded-xl border-2 border-dashed cursor-pointer transition-colors hover:border-indigo-400 hover:bg-indigo-50"
                     style={{ borderColor: "#C7D2FE", background: "#F5F3FF" }}
                   >
-                    <UploadIcon className="h-7 w-7" style={{ color: "#6366F1" }} />
+                    <i className="fa-solid fa-upload text-xl" style={{ color: "#6366F1" }} />
                     <span className="text-sm font-semibold" style={{ color: "#4338CA" }}>PDF файл сонгох</span>
                     <span className="text-xs" style={{ color: "#818CF8" }}>Хамгийн ихдээ 5MB</span>
                     <input

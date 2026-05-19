@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { BIG_FIVE_QUESTIONS, deriveInsights } from "@/lib/psychology";
-import { BrainCircuitIcon, CheckCircleIcon, ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 
 const TRAIT_COLORS: Record<string, string> = {
@@ -70,7 +69,7 @@ export default function AssessmentPage() {
       <div className="max-w-2xl mx-auto space-y-5">
         {/* Success banner */}
         <div className="rounded-2xl p-8 text-center" style={{ background: "var(--dark)" }}>
-          <CheckCircleIcon className="h-14 w-14 mx-auto mb-4" style={{ color: "var(--accent)" }} />
+          <i className="fa-solid fa-circle-check" style={{ color: "var(--accent)", fontSize: "3.5rem", display: "block", marginBottom: "1rem" }} />
           <h1 className="text-2xl font-extrabold text-white mb-2">Тест амжилттай дууслаа!</h1>
           <p style={{ color: "#64748B" }}>Таны Big Five сэтгэл зүйн профайл дараах байдалтай байна</p>
         </div>
@@ -116,7 +115,7 @@ export default function AssessmentPage() {
           style={{ background: "var(--accent)" }}
         >
           Тохирох ажлуудыг харах
-          <ArrowRightIcon className="h-4 w-4" />
+          <i className="fa-solid fa-arrow-right text-sm" />
         </Link>
       </div>
     );
@@ -131,7 +130,7 @@ export default function AssessmentPage() {
       <div className="rounded-2xl p-6" style={{ background: "var(--dark)" }}>
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(99,102,241,0.2)" }}>
-            <BrainCircuitIcon className="h-5 w-5" style={{ color: "var(--accent)" }} />
+            <i className="fa-solid fa-brain text-base" style={{ color: "var(--accent)" }} />
           </div>
           <div>
             <h1 className="font-extrabold text-white">Big Five Сэтгэл Зүйн Тест</h1>

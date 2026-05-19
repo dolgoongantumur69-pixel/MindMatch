@@ -1,12 +1,4 @@
 import Link from "next/link";
-import {
-  ArrowRightIcon,
-  SparklesIcon,
-  BriefcaseIcon,
-  BrainCircuitIcon,
-  TargetIcon,
-  TrendingUpIcon,
-} from "lucide-react";
 import { CATEGORIES, PROFESSIONS, type CategoryKey } from "@/data/professions";
 import HomeSearchBar from "@/components/HomeSearchBar";
 
@@ -58,7 +50,7 @@ export default function HomePage() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold mb-7 border"
             style={{ background: "rgba(75,123,245,0.18)", color: "#93B8FC", borderColor: "rgba(75,123,245,0.35)" }}
           >
-            <SparklesIcon className="h-3.5 w-3.5" />
+            <i className="fa-solid fa-wand-magic-sparkles text-xs" />
             100+ мэргэжил · MBTI · IQ · EQ тест
           </span>
 
@@ -83,14 +75,14 @@ export default function HomePage() {
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl text-sm font-bold transition-all hover:opacity-90 hover:scale-[1.02]"
               style={{ background: "#4B7BF5", color: "#FFFFFF", boxShadow: "0 8px 30px rgba(75,123,245,0.45)" }}
             >
-              Мэргэжлүүд үзэх <ArrowRightIcon className="h-4 w-4" />
+              Мэргэжлүүд үзэх <i className="fa-solid fa-arrow-right text-sm" />
             </Link>
             <Link
               href="/test"
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl text-sm font-semibold transition-all hover:bg-white/20"
               style={{ background: "rgba(255,255,255,0.12)", color: "white", border: "1px solid rgba(255,255,255,0.30)" }}
             >
-              <SparklesIcon className="h-4 w-4" /> Тест өгөх
+              <i className="fa-solid fa-wand-magic-sparkles text-sm" /> Тест өгөх
             </Link>
           </div>
 
@@ -176,7 +168,7 @@ export default function HomePage() {
             className="text-sm font-semibold flex items-center gap-1 transition-colors hover:opacity-80"
             style={{ color: "#4B7BF5" }}
           >
-            Бүгдийг харах <ArrowRightIcon className="h-4 w-4" />
+            Бүгдийг харах <i className="fa-solid fa-arrow-right text-sm" />
           </Link>
         </div>
 
@@ -223,7 +215,7 @@ export default function HomePage() {
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#4B7BF5" }}>
-              <BrainCircuitIcon className="h-5 w-5 text-white" />
+              <i className="fa-solid fa-brain text-base text-white" />
             </div>
             <div>
               <p className="font-bold text-sm" style={{ color: "#111827" }}>OCEAN Профайл</p>
@@ -252,7 +244,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="flex items-center gap-3 mt-4 p-3 rounded-xl" style={{ background: "#D5E3FC" }}>
-            <TargetIcon className="h-4 w-4" style={{ color: "#4B7BF5" }} />
+            <i className="fa-solid fa-bullseye text-sm" style={{ color: "#4B7BF5" }} />
             <p className="text-xs font-bold" style={{ color: "#111827" }}>Зөвлөмж: Програм хангамжийн инженер, Өгөгдлийн эрдэмтэн</p>
           </div>
         </div>
@@ -292,7 +284,7 @@ export default function HomePage() {
             className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-base font-bold transition-all hover:opacity-90 hover:scale-[1.02]"
             style={{ background: "#4B7BF5", color: "#FFFFFF", boxShadow: "0 8px 30px rgba(75,123,245,0.40)" }}
           >
-            Тест эхлэх <ArrowRightIcon className="h-5 w-5" />
+            Тест эхлэх <i className="fa-solid fa-arrow-right text-base" />
           </Link>
         </div>
       </section>
@@ -342,34 +334,34 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
           {[
             {
-              icon: BrainCircuitIcon,
+              faIcon: "fa-brain",
               iconBg: "#111827", iconColor: "#FFFFFF",
               title: "MBTI · IQ · EQ Тест",
               desc: "14 асуулт — зан чанар, оюун ухаан, сэтгэл хөдлөлийн оюун ухааныг хамтад нь хэмждэг Монгол хэл дээрх анхны тест.",
               tag: "Монгол хэл дээр", tagBg: "#EEF2FE", tagColor: "#4B7BF5",
             },
             {
-              icon: TargetIcon,
+              faIcon: "fa-bullseye",
               iconBg: "#4B7BF5", iconColor: "#FFFFFF",
               title: "Хувийн мэргэжлийн зөвлөмж",
               desc: "Таны MBTI, IQ, EQ үр дүнтэй харьцуулж, хамгийн тохирох 5 мэргэжлийг оноор эрэмбэлж гаргана.",
               tag: "Оноо тооцоолол", tagBg: "#D5E3FC", tagColor: "#3B6AE8",
             },
             {
-              icon: TrendingUpIcon,
+              faIcon: "fa-chart-line",
               iconBg: "#F3F4F6", iconColor: "#374151",
               title: "100+ Мэргэжлийн мэдээлэл",
               desc: "Цалин, шаардлагатай ур чадвар, боловсрол, хэрэгслүүд — бүгд Монгол хэлээр 8 салбарт хамрагдсан.",
               tag: "Монгол мэдээлэл", tagBg: "#F3F4F6", tagColor: "#374151",
             },
-          ].map(({ icon: Icon, iconBg, iconColor, title, desc, tag, tagBg, tagColor }, i) => (
+          ].map(({ faIcon, iconBg, iconColor, title, desc, tag, tagBg, tagColor }, i) => (
             <div
               key={i}
               className="rounded-2xl p-5 sm:p-8 border transition-all hover:-translate-y-1 hover:shadow-lg cursor-default"
               style={{ background: "#FFFFFF", borderColor: "#E2E7EF" }}
             >
               <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={{ background: iconBg }}>
-                <Icon className="h-6 w-6" style={{ color: iconColor }} />
+                <i className={`fa-solid ${faIcon} text-lg`} style={{ color: iconColor }} />
               </div>
               <h3 className="font-bold text-lg mb-2" style={{ color: "#111827" }}>{title}</h3>
               <p className="text-sm leading-relaxed mb-5" style={{ color: "#6B7280" }}>{desc}</p>
@@ -402,14 +394,14 @@ export default function HomePage() {
               className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl text-sm font-bold transition-all hover:opacity-90"
               style={{ background: "#4B7BF5", color: "#FFFFFF", boxShadow: "0 4px 20px rgba(75,123,245,0.40)" }}
             >
-              <SparklesIcon className="h-4 w-4" /> Тест өгөх
+              <i className="fa-solid fa-wand-magic-sparkles text-sm" /> Тест өгөх
             </Link>
             <Link
               href="/professions"
               className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl text-sm font-semibold"
               style={{ background: "rgba(255,255,255,0.08)", color: "#C4D3F8", border: "1px solid rgba(75,123,245,0.30)" }}
             >
-              <BriefcaseIcon className="h-4 w-4" /> Мэргэжлүүд харах
+              <i className="fa-solid fa-briefcase text-sm" /> Мэргэжлүүд харах
             </Link>
           </div>
         </div>

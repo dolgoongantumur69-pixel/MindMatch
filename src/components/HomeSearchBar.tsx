@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { SearchIcon } from "lucide-react";
 
 export default function HomeSearchBar() {
   const [q, setQ] = useState("");
@@ -16,8 +15,8 @@ export default function HomeSearchBar() {
 
   return (
     <form onSubmit={submit} className="relative w-full max-w-xl mx-auto">
-      <SearchIcon
-        className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 pointer-events-none"
+      <i
+        className="fa-solid fa-magnifying-glass text-base absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
         style={{ color: "#9CA3AF" }}
       />
       <input
