@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { getRecommendedProfessions, CATEGORIES, type RequirementLevel } from "@/data/professions";
 
 /* ─────────────────────────── types ─────────────────────────── */
@@ -376,13 +377,23 @@ const SECTION_STYLE: Record<Section, { bg: string; text: string; border: string;
 const SECTION_ORDER: Section[] = ["MBTI", "IQ", "EQ"];
 
 /* ─────────────────────────── component ─────────────────────────── */
+interface SavedResult {
+  mbtiType: string; iqScore: number; iqTotal: number;
+  eqScore: number;  eqMax: number;  updatedAt: string;
+}
+
 export default function TestPage() {
+  const { data: session } = useSession();
   const [phase, setPhase]       = useState<"intro" | "test" | "results">("intro");
   const [index, setIndex]       = useState(0);
   const [answers, setAnswers]   = useState<Record<number, string>>({});
   const [selected, setSelected] = useState<string | null>(null);
   const [slideState, setSlideState] = useState<"idle" | "exit" | "enter">("idle");
   const [slideDir, setSlideDir] = useState<"left" | "right">("left");
+  const [savedResult, setSavedResult] = useState<SavedResult | null>(null);
+  const [saving, setSaving]           = useState(false);
+  const [resultSaved, setResultSaved] = useState(false);
+  const hasSaved = useRef(false);
 
   const q        = QUESTIONS[index];
   const progress = (index / QUESTIONS.length) * 100;
@@ -428,6 +439,32 @@ export default function TestPage() {
     }
   }, [slideState]);
 
+  // Fetch saved result when user is logged in
+  useEffect(() => {
+    if (!session) return;
+    fetch("/api/personal-test")
+      .then((r) => r.json())
+      .then((d: SavedResult | null) => { if (d?.mbtiType) setSavedResult(d); })
+      .catch(() => {});
+  }, [session]);
+
+  // Auto-save when results phase is reached (once per test run)
+  useEffect(() => {
+    if (phase !== "results" || !session || hasSaved.current) return;
+    hasSaved.current = true;
+    const { mbtiType, iqScore, iqTotal, eqScore, eqMax } = calcResults(answers);
+    setSaving(true);
+    fetch("/api/personal-test", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mbtiType, iqScore, iqTotal, eqScore, eqMax }),
+    })
+      .then((r) => r.json())
+      .then((d: SavedResult) => { setSaving(false); setResultSaved(true); setSavedResult(d); })
+      .catch(() => setSaving(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, session]);
+
   const cardStyle: React.CSSProperties = {
     transition: "opacity 220ms ease, transform 220ms ease",
     opacity:    slideState === "exit" ? 0 : 1,
@@ -472,12 +509,40 @@ export default function TestPage() {
                 </div>
               </div>
             ))}
+            {/* Previous result banner */}
+            {savedResult && (
+              <div className="rounded-2xl p-4 border" style={{ background: "#F0FDF4", borderColor: "#86EFAC" }}>
+                <p className="text-[11px] font-bold mb-3 flex items-center gap-1.5" style={{ color: "#16A34A" }}>
+                  <i className="fa-solid fa-lock text-xs" />Таны хадгалагдсан үр дүн
+                </p>
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="rounded-xl py-2" style={{ background: "#FFFFFF" }}>
+                    <p className="font-extrabold text-base" style={{ color: "#4B7BF5" }}>{savedResult.mbtiType}</p>
+                    <p className="text-[10px]" style={{ color: "#6B7280" }}>MBTI</p>
+                  </div>
+                  <div className="rounded-xl py-2" style={{ background: "#FFFFFF" }}>
+                    <p className="font-extrabold text-base" style={{ color: "#F59E0B" }}>{savedResult.iqScore}/{savedResult.iqTotal}</p>
+                    <p className="text-[10px]" style={{ color: "#6B7280" }}>IQ оноо</p>
+                  </div>
+                  <div className="rounded-xl py-2" style={{ background: "#FFFFFF" }}>
+                    <p className="font-extrabold text-base" style={{ color: "#22C55E" }}>{Math.round((savedResult.eqScore / savedResult.eqMax) * 100)}%</p>
+                    <p className="text-[10px]" style={{ color: "#6B7280" }}>EQ</p>
+                  </div>
+                </div>
+              </div>
+            )}
+            {!session && (
+              <p className="text-[11px] text-center" style={{ color: "#9CA3AF" }}>
+                <i className="fa-solid fa-lock mr-1" />
+                <a href="/login" style={{ color: "#4B7BF5", fontWeight: 600 }}>Нэвтэрвэл</a> үр дүн хадгалагдана
+              </p>
+            )}
             <button
               onClick={() => setPhase("test")}
-              className="w-full py-3.5 rounded-2xl text-sm font-extrabold text-white mt-2 transition-opacity hover:opacity-90"
+              className="w-full py-3.5 rounded-2xl text-sm font-extrabold text-white transition-opacity hover:opacity-90"
               style={{ background: "linear-gradient(135deg, #4B7BF5, #7C3AED)" }}
             >
-              Тестийг эхлүүлэх →
+              {savedResult ? "Дахин өгөх →" : "Тестийг эхлүүлэх →"}
             </button>
           </div>
         </div>
@@ -507,6 +572,22 @@ export default function TestPage() {
           </div>
           <h1 className="text-xl font-extrabold" style={{ color: "#111827" }}>Таны үр дүн</h1>
           <p className="text-sm mt-1" style={{ color: "#9CA3AF" }}>30 асуултад хариулсан</p>
+          {session ? (
+            saving
+              ? <p className="text-xs mt-2 flex items-center justify-center gap-1.5" style={{ color: "#9CA3AF" }}>
+                  <span className="w-3 h-3 border-2 border-gray-300 border-t-gray-500 rounded-full animate-spin inline-block" />
+                  Хадгалж байна...
+                </p>
+              : resultSaved
+                ? <p className="text-xs mt-2 font-semibold" style={{ color: "#16A34A" }}>
+                    <i className="fa-solid fa-lock mr-1" />Хувийн үр дүн хадгалагдлаа
+                  </p>
+                : null
+          ) : (
+            <p className="text-xs mt-2" style={{ color: "#9CA3AF" }}>
+              <a href="/login" style={{ color: "#4B7BF5", fontWeight: 600 }}>Нэвтэрч</a> үр дүнгээ хадгалаарай
+            </p>
+          )}
         </div>
 
         <ResultCard color="#4B7BF5" bg="#EEF2FE" emoji="🧠"
@@ -576,7 +657,11 @@ export default function TestPage() {
         </div>
 
         <button
-          onClick={() => { setPhase("intro"); setIndex(0); setAnswers({}); setSelected(null); setSlideState("idle"); }}
+          onClick={() => {
+            setPhase("intro"); setIndex(0); setAnswers({});
+            setSelected(null); setSlideState("idle");
+            setSaving(false); setResultSaved(false); hasSaved.current = false;
+          }}
           className="w-full py-3 rounded-2xl text-sm font-bold border transition-colors hover:bg-gray-50"
           style={{ borderColor: "#E2E7EF", color: "#6B7280" }}
         >

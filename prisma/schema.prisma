@@ -29,10 +29,11 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  profile       Profile?
-  jobs          Job[]
-  applications  Application[]
-  assessment    Assessment?
+  profile            Profile?
+  jobs               Job[]
+  applications       Application[]
+  assessment         Assessment?
+  personalTestResult PersonalTestResult?
 }
 
 model Profile {
@@ -114,6 +115,20 @@ model Application {
   @@index([userId, createdAt(sort: Desc)])
   @@index([jobId, createdAt(sort: Desc)])
   @@index([status, createdAt(sort: Desc)])
+}
+
+model PersonalTestResult {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  mbtiType    String
+  iqScore     Int
+  iqTotal     Int
+  eqScore     Int
+  eqMax       Int
+  completedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PageView {
