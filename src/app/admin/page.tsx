@@ -2,7 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowRightIcon, BriefcaseIcon, BuildingIcon, ClipboardListIcon, UsersIcon } from "lucide-react";
+import {
+  ArrowRightIcon, BriefcaseIcon, BuildingIcon,
+  ClipboardListIcon, UsersIcon, TrendingUpIcon,
+  ActivityIcon, CircleIcon,
+} from "lucide-react";
 
 interface OverviewData {
   metrics: { usersCount: number; jobsCount: number; applicationsCount: number };
@@ -20,23 +24,27 @@ interface OverviewData {
   }>;
 }
 
-const STATUS_STYLE: Record<string, { bg: string; text: string }> = {
-  PENDING:  { bg: "#FEF9C3", text: "#854D0E" },
-  REVIEWED: { bg: "#EEF2FE", text: "#4B7BF5" },
-  ACCEPTED: { bg: "#ECFDF3", text: "#16A34A" },
-  REJECTED: { bg: "#FEF2F2", text: "#B91C1C" },
+const STATUS_COLOR: Record<string, { dot: string; label: string }> = {
+  PENDING:  { dot: "#F59E0B", label: "Хүлээгдэж буй" },
+  REVIEWED: { dot: "#4B7BF5", label: "Хянагдсан"     },
+  ACCEPTED: { dot: "#22C55E", label: "Хүлээн авсан"   },
+  REJECTED: { dot: "#EF4444", label: "Татгалзсан"     },
 };
 
-const ROLE_STYLE: Record<string, { bg: string; text: string }> = {
-  JOBSEEKER: { bg: "#EEF2FE", text: "#4B7BF5" },
-  EMPLOYER:  { bg: "#ECFDF3", text: "#16A34A" },
-  ADMIN:     { bg: "#F3E8FF", text: "#7C3AED" },
+const ROLE_COLOR: Record<string, string> = {
+  JOBSEEKER: "#4B7BF5",
+  EMPLOYER:  "#22C55E",
+  ADMIN:     "#A855F7",
 };
+
+const CARD = "rounded-2xl border p-5" as const;
+const BORDER = "rgba(255,255,255,0.07)" as const;
+const SURFACE = "#0F1624" as const;
 
 export default function AdminDashboard() {
-  const [data, setData] = useState<OverviewData | null>(null);
+  const [data, setData]       = useState<OverviewData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError]     = useState("");
 
   useEffect(() => {
     fetch("/api/admin/overview")
@@ -58,94 +66,159 @@ export default function AdminDashboard() {
 
   if (loading)
     return (
-      <div className="flex items-center justify-center py-32">
-        <div className="w-6 h-6 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+      <div className="flex items-center justify-center py-40">
+        <div className="w-8 h-8 rounded-full border-2 border-blue-500/20 border-t-blue-500 animate-spin" />
       </div>
     );
 
   if (error || !data)
     return (
-      <div className="rounded-xl p-4 text-sm" style={{ background: "#FEF2F2", color: "#B91C1C" }}>
-        {error || "No data"}
+      <div className="rounded-xl px-5 py-4 text-sm" style={{ background: "rgba(239,68,68,0.1)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.2)" }}>
+        {error || "Өгөгдөл ачааллахад алдаа гарлаа"}
       </div>
     );
 
+  const stats = [
+    { href: "/admin/users",        label: "Нийт хэрэглэгч", value: data.metrics.usersCount,        icon: UsersIcon,        color: "#4B7BF5", glow: "rgba(75,123,245,0.15)"  },
+    { href: "/admin/users?role=EMPLOYER", label: "Байгууллага", value: roleTotals.EMPLOYER,         icon: BuildingIcon,     color: "#22C55E", glow: "rgba(34,197,94,0.12)"   },
+    { href: "/admin/jobs",         label: "Ажлын байр",      value: data.metrics.jobsCount,         icon: BriefcaseIcon,    color: "#F59E0B", glow: "rgba(245,158,11,0.12)"  },
+    { href: "/admin/applications", label: "Өргөдлүүд",       value: data.metrics.applicationsCount, icon: ClipboardListIcon, color: "#A855F7", glow: "rgba(168,85,247,0.12)" },
+  ];
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-extrabold" style={{ color: "#111827" }}>Dashboard</h1>
-        <p className="text-sm mt-1" style={{ color: "#6B7280" }}>Platform overview and recent activity</p>
+    <div className="space-y-7">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">Дашбоард</h1>
+          <p className="text-sm mt-0.5" style={{ color: "#4B5563" }}>Платформын ерөнхий байдал</p>
+        </div>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: "rgba(34,197,94,0.1)", color: "#22C55E", border: "1px solid rgba(34,197,94,0.15)" }}>
+          <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+          Систем ажиллаж байна
+        </div>
       </div>
 
+      {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard href="/admin/users" label="Total Users" value={data.metrics.usersCount} icon={<UsersIcon className="h-5 w-5" />} color="#4B7BF5" />
-        <StatCard href="/admin/users?role=EMPLOYER" label="Employers" value={roleTotals.EMPLOYER} icon={<BuildingIcon className="h-5 w-5" />} color="#059669" />
-        <StatCard href="/admin/jobs" label="Jobs" value={data.metrics.jobsCount} icon={<BriefcaseIcon className="h-5 w-5" />} color="#EA580C" />
-        <StatCard href="/admin/applications" label="Applications" value={data.metrics.applicationsCount} icon={<ClipboardListIcon className="h-5 w-5" />} color="#7C3AED" />
+        {stats.map(({ href, label, value, icon: Icon, color, glow }) => (
+          <Link
+            key={href}
+            href={href}
+            className="rounded-2xl p-5 flex flex-col gap-4 transition-all hover:-translate-y-0.5 hover:shadow-lg group"
+            style={{ background: SURFACE, border: `1px solid ${BORDER}`, boxShadow: `0 0 0 0 ${glow}` }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: glow }}>
+                <Icon className="h-5 w-5" style={{ color }} />
+              </div>
+              <TrendingUpIcon className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color }} />
+            </div>
+            <div>
+              <p className="text-3xl font-extrabold text-white leading-none">{value.toLocaleString()}</p>
+              <p className="text-xs mt-1.5 font-medium" style={{ color: "#4B5563" }}>{label}</p>
+            </div>
+          </Link>
+        ))}
       </div>
 
-      <div className="rounded-2xl border p-5" style={{ borderColor: "#E2E7EF", background: "#FFFFFF" }}>
-        <h2 className="font-bold text-sm mb-4" style={{ color: "#111827" }}>User Breakdown</h2>
-        <div className="grid grid-cols-3 gap-4 text-center">
+      {/* Role breakdown */}
+      <div className={CARD} style={{ background: SURFACE, borderColor: BORDER }}>
+        <div className="flex items-center gap-2 mb-5">
+          <ActivityIcon className="h-4 w-4" style={{ color: "#4B7BF5" }} />
+          <h2 className="text-sm font-bold text-white">Хэрэглэгчдийн бүтэц</h2>
+        </div>
+        <div className="grid grid-cols-3 gap-4">
           {[
-            { label: "Job Seekers", count: roleTotals.JOBSEEKER, color: "#4B7BF5", bg: "#EEF2FE" },
-            { label: "Employers",   count: roleTotals.EMPLOYER,  color: "#059669", bg: "#ECFDF3" },
-            { label: "Admins",      count: roleTotals.ADMIN,     color: "#7C3AED", bg: "#F3E8FF" },
-          ].map(({ label, count, color, bg }) => (
-            <div key={label} className="rounded-xl p-3" style={{ background: bg }}>
+            { label: "Ажил хайгч",  count: roleTotals.JOBSEEKER, color: "#4B7BF5", pct: data.metrics.usersCount ? Math.round(roleTotals.JOBSEEKER / data.metrics.usersCount * 100) : 0 },
+            { label: "Байгууллага", count: roleTotals.EMPLOYER,  color: "#22C55E", pct: data.metrics.usersCount ? Math.round(roleTotals.EMPLOYER  / data.metrics.usersCount * 100) : 0 },
+            { label: "Админ",       count: roleTotals.ADMIN,     color: "#A855F7", pct: data.metrics.usersCount ? Math.round(roleTotals.ADMIN     / data.metrics.usersCount * 100) : 0 },
+          ].map(({ label, count, color, pct }) => (
+            <div key={label} className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs font-medium" style={{ color: "#6B7280" }}>{label}</p>
+                <p className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ background: color + "20", color }}>{pct}%</p>
+              </div>
               <p className="text-2xl font-extrabold" style={{ color }}>{count}</p>
-              <p className="text-xs mt-1 font-medium" style={{ color }}>{label}</p>
+              <div className="mt-3 h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                <div className="h-full rounded-full" style={{ width: `${pct}%`, background: color }} />
+              </div>
             </div>
           ))}
         </div>
       </div>
 
+      {/* Recent activity */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <div className="rounded-2xl border overflow-hidden" style={{ borderColor: "#E2E7EF", background: "#FFFFFF" }}>
-          <SectionHeader label="Recent Users" href="/admin/users" />
-          <div className="divide-y" style={{ borderColor: "#F3F4F6" }}>
+        {/* Recent users */}
+        <div className="rounded-2xl overflow-hidden" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
+          <TableHeader label="Сүүлийн хэрэглэгчид" href="/admin/users" />
+          <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
             {data.recentUsers.slice(0, 6).map((u) => (
-              <div key={u.id} className="px-4 py-3 flex items-center gap-3">
-                <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0" style={{ background: "#EEF2FE", color: "#4B7BF5" }}>
+              <div key={u.id} className="px-4 py-3 flex items-center gap-3 hover:bg-white/[0.02] transition-colors">
+                <div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 text-white"
+                  style={{ background: (ROLE_COLOR[u.role] ?? "#4B5563") + "30", color: ROLE_COLOR[u.role] ?? "#4B5563" }}
+                >
                   {(u.name?.[0] ?? u.email[0]).toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs font-semibold truncate" style={{ color: "#111827" }}>{u.name ?? u.email}</p>
-                  <p className="text-[10px] truncate" style={{ color: "#9CA3AF" }}>{u.email}</p>
+                  <p className="text-xs font-semibold truncate text-white">{u.name ?? u.email}</p>
+                  <p className="text-[10px] truncate" style={{ color: "#4B5563" }}>{u.email}</p>
                 </div>
-                <Badge style={ROLE_STYLE[u.role] ?? { bg: "#F3F4F6", text: "#6B7280" }} label={u.role} />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-2xl border overflow-hidden" style={{ borderColor: "#E2E7EF", background: "#FFFFFF" }}>
-          <SectionHeader label="Recent Jobs" href="/admin/jobs" />
-          <div className="divide-y" style={{ borderColor: "#F3F4F6" }}>
-            {data.recentJobs.slice(0, 6).map((j) => (
-              <div key={j.id} className="px-4 py-3">
-                <p className="text-xs font-semibold truncate" style={{ color: "#111827" }}>{j.title}</p>
-                <p className="text-[10px] truncate mt-0.5" style={{ color: "#9CA3AF" }}>
-                  {j.employer.profile?.companyName ?? j.employer.name ?? "Unknown"} · {j._count.applications} apps
-                </p>
-                <span className="mt-1.5 inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded" style={{ background: j.isActive ? "#ECFDF3" : "#F3F4F6", color: j.isActive ? "#16A34A" : "#6B7280" }}>
-                  {j.isActive ? "Active" : "Inactive"}
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0" style={{ background: (ROLE_COLOR[u.role] ?? "#4B5563") + "20", color: ROLE_COLOR[u.role] ?? "#4B5563" }}>
+                  {u.role === "JOBSEEKER" ? "Ажил хайгч" : u.role === "EMPLOYER" ? "Байгууллага" : "Админ"}
                 </span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="rounded-2xl border overflow-hidden" style={{ borderColor: "#E2E7EF", background: "#FFFFFF" }}>
-          <SectionHeader label="Recent Applications" href="/admin/applications" />
-          <div className="divide-y" style={{ borderColor: "#F3F4F6" }}>
-            {data.recentApplications.slice(0, 6).map((a) => (
-              <div key={a.id} className="px-4 py-3">
-                <p className="text-xs font-semibold truncate" style={{ color: "#111827" }}>{a.user.name ?? a.user.email}</p>
-                <p className="text-[10px] truncate mt-0.5" style={{ color: "#9CA3AF" }}>{a.job.title}</p>
-                <Badge style={STATUS_STYLE[a.status] ?? { bg: "#F3F4F6", text: "#6B7280" }} label={a.status} />
+        {/* Recent jobs */}
+        <div className="rounded-2xl overflow-hidden" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
+          <TableHeader label="Сүүлийн ажлын байр" href="/admin/jobs" />
+          <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
+            {data.recentJobs.slice(0, 6).map((j) => (
+              <div key={j.id} className="px-4 py-3 hover:bg-white/[0.02] transition-colors">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-xs font-semibold text-white truncate">{j.title}</p>
+                  <span className="text-[10px] font-bold shrink-0 px-1.5 py-0.5 rounded" style={{
+                    background: j.isActive ? "rgba(34,197,94,0.12)" : "rgba(107,114,128,0.12)",
+                    color:      j.isActive ? "#22C55E"              : "#6B7280",
+                  }}>
+                    {j.isActive ? "Идэвхтэй" : "Идэвхгүй"}
+                  </span>
+                </div>
+                <p className="text-[10px] mt-1 truncate" style={{ color: "#4B5563" }}>
+                  {j.employer.profile?.companyName ?? j.employer.name ?? "Тодорхойгүй"}
+                </p>
+                <p className="text-[10px] mt-0.5" style={{ color: "#374151" }}>
+                  {j._count.applications} өргөдөл
+                </p>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Recent applications */}
+        <div className="rounded-2xl overflow-hidden" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
+          <TableHeader label="Сүүлийн өргөдлүүд" href="/admin/applications" />
+          <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
+            {data.recentApplications.slice(0, 6).map((a) => {
+              const st = STATUS_COLOR[a.status] ?? { dot: "#6B7280", label: a.status };
+              return (
+                <div key={a.id} className="px-4 py-3 hover:bg-white/[0.02] transition-colors">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <p className="text-xs font-semibold text-white truncate">{a.user.name ?? a.user.email}</p>
+                    <span className="flex items-center gap-1 text-[10px] font-semibold shrink-0" style={{ color: st.dot }}>
+                      <CircleIcon className="h-1.5 w-1.5 fill-current" />
+                      {st.label}
+                    </span>
+                  </div>
+                  <p className="text-[10px] truncate" style={{ color: "#4B5563" }}>{a.job.title}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -153,35 +226,13 @@ export default function AdminDashboard() {
   );
 }
 
-function StatCard({ href, label, value, icon, color }: { href: string; label: string; value: number; icon: React.ReactNode; color: string }) {
+function TableHeader({ label, href }: { label: string; href: string }) {
   return (
-    <Link href={href} className="rounded-2xl border p-4 flex items-center gap-3 hover:shadow-sm transition-shadow" style={{ borderColor: "#E2E7EF", background: "#FFFFFF" }}>
-      <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: color + "1A", color }}>
-        {icon}
-      </div>
-      <div>
-        <p className="text-2xl font-extrabold leading-none" style={{ color }}>{value.toLocaleString()}</p>
-        <p className="text-xs mt-1" style={{ color: "#6B7280" }}>{label}</p>
-      </div>
-    </Link>
-  );
-}
-
-function SectionHeader({ label, href }: { label: string; href: string }) {
-  return (
-    <div className="px-4 py-3 flex items-center justify-between border-b" style={{ borderColor: "#F3F4F6" }}>
-      <h2 className="font-bold text-sm" style={{ color: "#111827" }}>{label}</h2>
-      <Link href={href} className="text-[11px] font-semibold flex items-center gap-1" style={{ color: "#4B7BF5" }}>
-        View all <ArrowRightIcon className="h-3 w-3" />
+    <div className="px-4 py-3.5 flex items-center justify-between border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+      <h2 className="text-xs font-bold text-white uppercase tracking-wide">{label}</h2>
+      <Link href={href} className="flex items-center gap-1 text-[11px] font-semibold transition-opacity hover:opacity-70" style={{ color: "#4B7BF5" }}>
+        Бүгдийг харах <ArrowRightIcon className="h-3 w-3" />
       </Link>
     </div>
-  );
-}
-
-function Badge({ style, label }: { style: { bg: string; text: string }; label: string }) {
-  return (
-    <span className="mt-1.5 inline-block text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ background: style.bg, color: style.text }}>
-      {label}
-    </span>
   );
 }

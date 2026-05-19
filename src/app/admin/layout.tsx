@@ -12,12 +12,20 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <div className="flex -mx-4 sm:-mx-6 min-h-[calc(100vh-4rem)]">
+    <div
+      className="flex -mx-4 sm:-mx-6 min-h-[calc(100vh-4rem)]"
+      style={{ background: "#070B14" }}
+    >
+      {/* Sidebar */}
       <div className="sticky top-16 h-[calc(100vh-4rem)] shrink-0 overflow-y-auto">
         <AdminSidebar email={session.user.email ?? ""} name={session.user.name ?? ""} />
       </div>
-      <div className="flex-1 min-w-0 px-6 py-6">
-        {children}
+
+      {/* Content */}
+      <div className="flex-1 min-w-0 overflow-auto">
+        <div className="px-7 py-7 min-h-full">
+          {children}
+        </div>
       </div>
     </div>
   );
