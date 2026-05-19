@@ -13,16 +13,16 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div
-      className="flex -mx-4 sm:-mx-6 min-h-[calc(100vh-4rem)]"
-      style={{ background: "#070B14" }}
+      className="fixed flex"
+      style={{ background: "#070B14", top: "64px", left: 0, right: 0, bottom: 0, zIndex: 10 }}
     >
       {/* Sidebar */}
-      <div className="sticky top-16 h-[calc(100vh-4rem)] shrink-0 overflow-y-auto">
+      <div className="shrink-0 h-full overflow-y-auto">
         <AdminSidebar email={session.user.email ?? ""} name={session.user.name ?? ""} />
       </div>
 
       {/* Content */}
-      <div className="flex-1 min-w-0 overflow-auto">
+      <div className="flex-1 min-w-0 overflow-y-auto">
         <div className="px-7 py-7 min-h-full">
           {children}
         </div>
