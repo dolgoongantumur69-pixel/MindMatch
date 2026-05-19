@@ -1,7 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import GitHubProvider from "next-auth/providers/github";
 import bcrypt from "bcryptjs";
 import { randomUUID } from "crypto";
 import { prisma } from "./prisma";
@@ -13,10 +12,6 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId:     process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-    GitHubProvider({
-      clientId:     process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
     CredentialsProvider({
       name: "credentials",
@@ -41,7 +36,7 @@ export const authOptions: NextAuthOptions = {
           token.id   = user.id;
           token.role = (user as { role: string }).role;
         } else {
-          // OAuth sign-in — upsert user by email
+          // Google OAuth — upsert user by email
           const email = user.email;
           if (!email) return token;
           let dbUser = await prisma.user.findUnique({ where: { email } });
